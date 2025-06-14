@@ -274,7 +274,7 @@ $(document).ready(function() {
 
     $('<span class="clear active"/>')
         .data( 'number', '' )
-        .html( 'All' )
+        // .html( 'All' )
         .appendTo( alphabet );
 
  console.log('letter');
@@ -309,6 +309,8 @@ $(document).ready(function() {
         $(this).addClass( 'active' );
  
         _alphabetSearch = $(this).data('letter');
+        _alphabetSearch = $(this).data('number');
+      
         table.draw();
     } );
 } );
