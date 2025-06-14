@@ -277,17 +277,23 @@ $(document).ready(function() {
         .html( 'All' )
         .appendTo( alphabet );
 
+ console.log('letter');
   
     for ( var i=0 ; i<26 ; i++ ) {
         var letter = String.fromCharCode( 65 + i );
- 
+ console.log(letter);
         $('<span/>')
             .data( 'letter', letter )
             .html( letter )
             .appendTo( alphabet );
     }
  for ( var i=32 ; i<65 ; i++ ) {
+   
         var number = String.fromCharCode( i );
+ console.log(number);
+ 
+ 
+ 
  
         $('<span/>')
             .data( 'number', number )
