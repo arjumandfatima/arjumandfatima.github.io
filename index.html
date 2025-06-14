@@ -274,15 +274,51 @@ $.fn.dataTable.ext.search.push( function ( settings, searchData ) {
 // });
 // }); 
 
-    $(document).ready(function() {
-    // var table = $('#example').DataTable();
-  var table =  new DataTable('#example', {
+   var _alphabetSearch = '';
+ 
+$.fn.dataTable.ext.search.push( function ( settings, searchData ) {
+    if ( ! _alphabetSearch ) {
+        return true;
+    }
+ 
+    if ( searchData[0].charAt(0) === _alphabetSearch ) {
+        return true;
+    }
+ 
+    return false;
+} );
+ 
+ 
+function bin ( data ) {
+    var letter, bins = {};
+ 
+    for ( var i=0, ien=data.length ; i<ien ; i++ ) {
+        letter = data[i].charAt(0).toUpperCase();
+ 
+        if ( bins[letter] ) {
+            bins[letter]++;
+        }
+        else {
+            bins[letter] = 1;
+        }
+    }
+ 
+    return bins;
+}
+ 
+ 
+$(document).ready(function() {
+    var table = $('#example').DataTable();
+ var table =   new DataTable('#example', {
     ajax: '../arrays.txt'
 });
     var alphabet = $('<div class="alphabet"/>').append( 'Search: ' );
+    var columnData = table.column(0).data();
+    var bins = bin( columnData );
  
     $('<span class="clear active"/>')
         .data( 'letter', '' )
+        .data( 'match-count', columnData.length )
         .html( 'None' )
         .appendTo( alphabet );
  
@@ -291,6 +327,8 @@ $.fn.dataTable.ext.search.push( function ( settings, searchData ) {
  
         $('<span/>')
             .data( 'letter', letter )
+            .data( 'match-count', bins[letter] || 0 )
+            .addClass( ! bins[letter] ? 'empty' : '' )
             .html( letter )
             .appendTo( alphabet );
     }
@@ -304,6 +342,23 @@ $.fn.dataTable.ext.search.push( function ( settings, searchData ) {
         _alphabetSearch = $(this).data('letter');
         table.draw();
     } );
+ 
+    var info = $('<div class="alphabetInfo"></div>')
+        .appendTo( alphabet );
+ 
+    alphabet
+        .on( 'mouseenter', 'span', function () {
+            info
+                .css( {
+                    opacity: 1,
+                    left: $(this).position().left,
+                    width: $(this).width()
+                } )
+                .html( $(this).data('match-count') )
+        } )
+        .on( 'mouseleave', 'span', function () {
+            info.css('opacity', 0);
+        } );
 } );
    
   </script>
