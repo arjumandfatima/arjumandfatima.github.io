@@ -253,19 +253,7 @@ function arrangeColumns() {
 
   <script>
 
-    var _alphabetSearch = '';
  
-$.fn.dataTable.ext.search.push( function ( settings, searchData ) {
-    if ( ! _alphabetSearch ) {
-        return true;
-    }
- 
-    if ( searchData[0].charAt(0) === _alphabetSearch ) {
-        return true;
-    }
- 
-    return false;
-} );
 
     
 // $(document).ready(function(){
