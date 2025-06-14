@@ -10,6 +10,28 @@ body {
   width: 100%;
   height: 500px;
 }
+
+  div.alphabet {
+    display: table;
+    width: 100%;
+    margin-bottom: 1em;
+}
+ 
+div.alphabet span {
+    display: table-cell;
+    color: #3174c7;
+    cursor: pointer;
+    text-align: center;
+    width: 3.5%
+}
+ 
+div.alphabet span:hover {
+    text-decoration: underline;
+}
+ 
+div.alphabet span.active {
+    color: black;
+}
 </style>
 <script src="https://cdn.amcharts.com/lib/4/core.js"></script>
 <script src="https://cdn.amcharts.com/lib/4/charts.js"></script>
