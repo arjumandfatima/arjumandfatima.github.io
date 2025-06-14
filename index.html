@@ -12,7 +12,6 @@ body {
 }
 
 div.alphabet {
-    position: relative;
     display: table;
     width: 100%;
     margin-bottom: 1em;
@@ -32,23 +31,6 @@ div.alphabet span:hover {
  
 div.alphabet span.active {
     color: black;
-}
- 
-div.alphabet span.empty {
-    color: red;
-}
- 
-div.alphabetInfo {
-    display: block;
-    position: absolute;
-    background-color: #111;
-    border-radius: 3px;
-    color: white;
-    top: 2em;
-    height: 1.8em;
-    padding-top: 0.4em;
-    text-align: center;
-    z-index: 1;
 }
 </style>
 <script src="https://cdn.amcharts.com/lib/4/core.js"></script>
@@ -262,39 +244,14 @@ function arrangeColumns() {
 // });
 // }); 
 
- (function(){
+var _alphabetSearch = '';
  
- 
-// Search function
-$.fn.dataTable.Api.register( 'alphabetSearch()', function ( searchTerm ) {
-    this.iterator( 'table', function ( context ) {
-        context.alphabetSearch = searchTerm;
-    } );
- 
-    return this;
-} );
- 
-// Recalculate the alphabet display for updated data
-$.fn.dataTable.Api.register( 'alphabetSearch.recalc()', function ( searchTerm ) {
-    this.iterator( 'table', function ( context ) {
-        draw(
-            new $.fn.dataTable.Api( context ),
-            $('div.alphabet', this.table().container())
-        );
-    } );
- 
-    return this;
-} );
- 
- 
-// Search plug-in
-$.fn.dataTable.ext.search.push( function ( context, searchData ) {
-    // Ensure that there is a search applied to this table before running it
-    if ( ! context.alphabetSearch ) {
+$.fn.dataTable.ext.search.push( function ( settings, searchData ) {
+    if ( ! _alphabetSearch ) {
         return true;
     }
  
-    if ( searchData[0].charAt(0) === context.alphabetSearch ) {
+    if ( searchData[0].charAt(0) === _alphabetSearch ) {
         return true;
     }
  
@@ -302,35 +259,15 @@ $.fn.dataTable.ext.search.push( function ( context, searchData ) {
 } );
  
  
-// Private support methods
-function bin ( data ) {
-    var letter, bins = {};
- 
-    for ( var i=0, ien=data.length ; i<ien ; i++ ) {
-        letter = data[i].charAt(0).toUpperCase();
- 
-        if ( bins[letter] ) {
-            bins[letter]++;
-        }
-        else {
-            bins[letter] = 1;
-        }
-    }
- 
-    return bins;
-}
- 
-function draw ( table, alphabet )
-{
-    alphabet.empty();
-    alphabet.append( 'Search: ' );
- 
-    var columnData = table.column(0).data();
-    var bins = bin( columnData );
+$(document).ready(function() {
+    // var table = $('#example').DataTable();
+ var table =  new DataTable('#example', {
+    ajax: '../arrays.txt'
+});
+    var alphabet = $('<div class="alphabet"/>').append( 'Search: ' );
  
     $('<span class="clear active"/>')
         .data( 'letter', '' )
-        .data( 'match-count', columnData.length )
         .html( 'None' )
         .appendTo( alphabet );
  
@@ -339,71 +276,19 @@ function draw ( table, alphabet )
  
         $('<span/>')
             .data( 'letter', letter )
-            .data( 'match-count', bins[letter] || 0 )
-            .addClass( ! bins[letter] ? 'empty' : '' )
             .html( letter )
             .appendTo( alphabet );
     }
  
-    $('<div class="alphabetInfo"></div>')
-        .appendTo( alphabet );
-}
+    alphabet.insertBefore( table.table().container() );
  
- 
-$.fn.dataTable.AlphabetSearch = function ( context ) {
-    var table = new $.fn.dataTable.Api( context );
-    var alphabet = $('<div class="alphabet"/>');
- 
-    draw( table, alphabet );
- 
-    // Trigger a search
     alphabet.on( 'click', 'span', function () {
         alphabet.find( '.active' ).removeClass( 'active' );
         $(this).addClass( 'active' );
  
-        table
-            .alphabetSearch( $(this).data('letter') )
-            .draw();
+        _alphabetSearch = $(this).data('letter');
+        table.draw();
     } );
- 
-    // Mouse events to show helper information
-    alphabet
-        .on( 'mouseenter', 'span', function () {
-            alphabet
-                .find('div.alphabetInfo')
-                .css( {
-                    opacity: 1,
-                    left: $(this).position().left,
-                    width: $(this).width()
-                } )
-                .html( $(this).data('match-count') );
-        } )
-        .on( 'mouseleave', 'span', function () {
-            alphabet
-                .find('div.alphabetInfo')
-                .css('opacity', 0);
-        } );
- 
-    // API method to get the alphabet container node
-    this.node = function () {
-        return alphabet;
-    };
-};
- 
-$.fn.DataTable.AlphabetSearch = $.fn.dataTable.AlphabetSearch;
- 
- 
-// Register a search plug-in
-$.fn.dataTable.ext.feature.push( {
-    fnInit: function ( settings ) {
-        var search = new $.fn.dataTable.AlphabetSearch( settings );
-        return search.node();
-    },
-    cFeature: 'A'
 } );
- 
- 
-}());
-   
   </script>
 </html>
