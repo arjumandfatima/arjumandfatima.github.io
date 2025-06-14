@@ -204,11 +204,59 @@ function arrangeColumns() {
 }</script>
 
   <script>
-$(document).ready(function(){
-  new DataTable('#example', {
+
+    var _alphabetSearch = '';
+ 
+$.fn.dataTable.ext.search.push( function ( settings, searchData ) {
+    if ( ! _alphabetSearch ) {
+        return true;
+    }
+ 
+    if ( searchData[0].charAt(0) === _alphabetSearch ) {
+        return true;
+    }
+ 
+    return false;
+} );
+
+    
+// $(document).ready(function(){
+//   new DataTable('#example', {
+//     ajax: '../arrays.txt'
+// });
+// }); 
+
+    $(document).ready(function() {
+    // var table = $('#example').DataTable();
+  var table =  new DataTable('#example', {
     ajax: '../arrays.txt'
 });
-}); 
+    var alphabet = $('<div class="alphabet"/>').append( 'Search: ' );
+ 
+    $('<span class="clear active"/>')
+        .data( 'letter', '' )
+        .html( 'None' )
+        .appendTo( alphabet );
+ 
+    for ( var i=0 ; i<26 ; i++ ) {
+        var letter = String.fromCharCode( 65 + i );
+ 
+        $('<span/>')
+            .data( 'letter', letter )
+            .html( letter )
+            .appendTo( alphabet );
+    }
+ 
+    alphabet.insertBefore( table.table().container() );
+ 
+    alphabet.on( 'click', 'span', function () {
+        alphabet.find( '.active' ).removeClass( 'active' );
+        $(this).addClass( 'active' );
+ 
+        _alphabetSearch = $(this).data('letter');
+        table.draw();
+    } );
+} );
    
   </script>
 </html>
