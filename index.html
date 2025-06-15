@@ -515,10 +515,10 @@ function buildAlphabetNav(api) {
   $nav.empty();
 
   // "All" button
-  $('<button type="button" class="btn btn-outline-primary active" data-letter="">All</button>').appendTo($nav);
+  $('<button type="button" class="btn btn-outline-dark active" data-letter="">All</button>').appendTo($nav);
 
   nav.forEach(letter => {
-    $(`<button type="button" class="btn btn-outline-primary" data-letter="${letter}">${letter}</button>`).appendTo($nav);
+    $(`<button type="button" class="btn btn-outline-dark" data-letter="${letter}">${letter}</button>`).appendTo($nav);
   });
 
   // Click behavior
