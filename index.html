@@ -263,8 +263,14 @@ $(document).ready(function() {
     // var table = $('#example').DataTable();
  var table =  new DataTable('#example', {
     // ajax: '../arrays.txt'
-    ajax: '../MinimalChangesData.txt'
-   
+    ajax: '../MinimalChangesData.txt',
+    dataSrc: '',            // Because it's a flat array
+        columns: [
+          { data: 2 }, // TagName
+          { data: 3 }, // TagCount
+          { data: 5 }, // ExcerptPostBody
+          { data: 7 }  // WikiPostBody
+        ]
 });
     var alphabet = $('<div class="alphabet"/>').append( 'Search: ' );
  
