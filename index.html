@@ -10,84 +10,6 @@ body {
   width: 100%;
   height: 500px;
 } 
-/* 
-div.alphabet-nav {
-   clear:both;
-	position:relative;
-	margin:0.5em 0;
-}  
-
-@media screen and (max-width:767px){
-	div.alphabet-nav {
-		text-align:center;
-	}
-}
-
-div.alphabet-nav ul.pagination {
-	margin:0;
-}
-
-div.alphabet-nav ul.pagination > li {
-	display:inline-block;
-}
-
-div.alphabet-nav a span {
-	opacity:1;
-}
-
-div.alphabet-nav a.empty span {
-	opacity:0.3;
-}
-
-div.alphabet-nav a.empty.active span {
-	opacity:1;
-}
-
-div.alphabet-nav .alphabet-nav-info-display {
-	vertical-align:top;
-	margin-right:0.5em;
-}
-
-div.alphabet-nav div.alphabet-nav-info {
-	position:absolute;
-	background-color:#111;
-	border-radius:3px;
-	color:#FFF;
-	margin-top:0.2em;
-	padding:0.2em 0.4em;
-	text-align:center;
-	opacity:0;
-	transition:opacity .4s ease-in-out;
-	z-index:9999;
-} */
-
-/* tr.alphabet-group, tr.alphabet-group:hover {
-	background-color:rgba(0,0,0,0.15) !important;
-}
- */
-
-  
-/* div.alphabet-nav {
-    display: table;
-    width: 100%;
-    margin-bottom: 1em;
-}
-  
-div.alphabet-nav span {
-    display: table-cell;
-    color: #3174c7;
-    cursor: pointer;
-    text-align: center;
-     width: 3.5% 
-}
-  
-div.alphabet-nav span:hover {
-    text-decoration: underline;
-}
- 
-div.alphabet-nav span.active {
-    color: black;
-}  */
 
 	#alphabet-nav {
   flex-wrap: wrap;
@@ -95,28 +17,7 @@ div.alphabet-nav span.active {
 }
 </style>
 
-<style>
-/*     #alphabet-nav {
-      margin-bottom: 10px;
-      font-weight: bold;
-    }
 
-    #alphabet-nav a {
-      margin: 0 4px;
-      text-decoration: none;
-      cursor: pointer;
-    }
-
-    #alphabet-nav a.active {
-      text-decoration: underline;
-      color: darkblue;
-    } */
-
-/*     td.body-html {
-      max-width: 400px;
-      white-space: normal;
-    } */
-  </style>
 <script src="https://cdn.amcharts.com/lib/4/core.js"></script>
 <script src="https://cdn.amcharts.com/lib/4/charts.js"></script>
 <script src="https://cdn.amcharts.com/lib/4/themes/animated.js"></script>
@@ -182,27 +83,7 @@ div.alphabet-nav span.active {
         <li>Sort tags based on Tag Count</li>
       </ul>
 
-<!--       <table id="example" class="display">
-        <thead>
-            <tr>
-                <th>Tag Name</th>
-                <th>Tag Count</th>
-                <th>Excerpt</th>
-              <th>Wiki Definition</th>
 
-            </tr>
-        </thead>
-        <tfoot>
-            <tr>
-                <th>Tag Name</th>
-                <th>Tag Count</th>
-                 <th>Excerpt</th>
-              <th>Wiki Definition</th>
-
-            </tr>
-        </tfoot>
-    </table> -->
-<!-- <div id="alphabet-nav"></div> -->
 	    <div id="alphabet-nav" class="btn-group btn-group-sm mb-2" role="group" aria-label="Alphabet Search"></div>
 
       <table id="tagsTable" class="display" >
@@ -219,19 +100,7 @@ div.alphabet-nav span.active {
     </thead>
   </table>
       
-<!-- 
-      <table id="tagsTable" class="display" style="width:100%">
-    <thead>
-      <tr>
-        <th>Tag Name</th>
-        <th>Tag Count</th>
-        <th>Excerpt Exists</th>
-        <th>Excerpt Preview</th>
-        <th>Wiki Exists</th>
-        <th>Wiki Preview</th>
-      </tr>
-    </thead>
-  </table> -->
+
 
   <!-- Dependencies -->
 <!--   <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script> -->
@@ -527,7 +396,7 @@ const tagNameColumnIndex =2;
   });
 
   // Button click event
-  $nav.off('click').on('click', 'button', function () {
+  $nav.on('click').on('click', 'button', function () {
     $nav.find('button').removeClass('active');
     $(this).addClass('active');
 
