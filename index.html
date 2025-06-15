@@ -34,30 +34,26 @@ div.alphabet span.active {
 } */
 </style>
 
-    <style>
-    #alphabetSearch {
-      padding: 10px;
+<style>
+    #alphabet-nav {
       margin-bottom: 10px;
+      font-weight: bold;
     }
-    #alphabetSearch span {
+
+    #alphabet-nav a {
+      margin: 0 4px;
+      text-decoration: none;
       cursor: pointer;
-      padding: 5px 10px;
-      border: 1px solid #ccc;
-      margin-right: 5px;
-      border-radius: 3px;
-      background-color: #f2f2f2;
     }
-    #alphabetSearch span.active {
-      background-color: #4285f4;
-      color: white;
+
+    #alphabet-nav a.active {
+      text-decoration: underline;
+      color: darkblue;
     }
-    td span.tooltip-text {
-      display: inline-block;
-      max-width: 300px;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      vertical-align: top;
+
+    td.body-html {
+      max-width: 400px;
+      white-space: normal;
     }
   </style>
 <script src="https://cdn.amcharts.com/lib/4/core.js"></script>
@@ -141,8 +137,21 @@ div.alphabet span.active {
             </tr>
         </tfoot>
     </table> -->
-
 <div id="alphabetSearch"></div>
+      <table id="tagsTable" class="display" style="width:100%">
+    <thead>
+      <tr>
+        <th>Tag Name</th>
+        <th>Tag Count</th>
+        <th>Excerpt Body</th>
+        <th>Excerpt Exists</th>
+        <th>Wiki Body (HTML)</th>
+        <th>Wiki Exists</th>
+      </tr>
+    </thead>
+  </table>
+      
+<!-- 
       <table id="tagsTable" class="display" style="width:100%">
     <thead>
       <tr>
@@ -154,7 +163,7 @@ div.alphabet span.active {
         <th>Wiki Preview</th>
       </tr>
     </thead>
-  </table>
+  </table> -->
 
   <!-- Dependencies -->
   <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
@@ -278,7 +287,7 @@ function arrangeColumns() {
     }
 }</script>
 
-  <script>
+<!--   <script>
     $(document).ready(function () {
       const filterChars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789._#+-$*~'.split('');
       const alphabetContainer = $('#alphabetSearch');
@@ -297,7 +306,7 @@ function arrangeColumns() {
         columns: [
           { data: 2 }, // TagName
           { data: 3 }, // TagCount
-
+ 
           {
             data: 5, // ExcerptBody
             render: data => data?.trim() ? 'Yes' : 'No'
@@ -349,6 +358,79 @@ function arrangeColumns() {
           table.column(0).search('^' + escaped, true, false).draw();
         }
       });
+    });
+  </script> -->
+
+
+    <script>
+    $(document).ready(function() {
+      const table = $('#tagsTable').DataTable({
+        ajax: 'TagsPosts.json',
+        columns: [
+          { data: 2 },  // TagName
+          { data: 3 },  // TagCount
+          {
+            data: 6,  // ExcerptPostBody
+            render: function (data, type) {
+              return data ? '<span title="' + data + '">' + data + '</span>' : '';
+            }
+          },
+          {
+            data: 6,
+            render: function (data) {
+              return data.trim() ? '✔️' : '❌';
+            }
+          },
+          {
+            data: 7,  // WikiPostBody (HTML)
+            className: 'body-html',
+            render: function (data, type) {
+              return type === 'display' ? data : data;
+            }
+          },
+          {
+            data: 7,
+            render: function (data) {
+              return data.trim() ? '✔️' : '❌';
+            }
+          }
+        ],
+        initComplete: function () {
+          buildAlphabetNav(this.api());
+        }
+      });
+
+      function buildAlphabetNav(api) {
+        const alphabet = {};
+        api.rows().every(function () {
+          const tag = this.data()[2]; // TagName
+          if (!tag) return;
+          const firstChar = tag[0].toUpperCase();
+          if (!alphabet[firstChar]) alphabet[firstChar] = true;
+        });
+
+        const specialChars = Object.keys(alphabet).filter(ch => !/[A-Z0-9]/.test(ch)).sort();
+        const letters = Object.keys(alphabet).filter(ch => /[A-Z]/.test(ch)).sort();
+        const digits = Object.keys(alphabet).filter(ch => /[0-9]/.test(ch)).sort();
+
+        const nav = specialChars.concat(letters).concat(digits);
+        const $nav = $('#alphabet-nav');
+        $nav.empty();
+
+        $('<a class="active" data-letter="">All</a>').appendTo($nav);
+
+        nav.forEach(letter => {
+          $('<a data-letter="' + letter + '">' + letter + '</a>').appendTo($nav);
+        });
+
+        $nav.on('click', 'a', function () {
+          $('#alphabet-nav a').removeClass('active');
+          $(this).addClass('active');
+          const letter = $(this).data('letter');
+
+          api.column(2).search(letter ? '^' + letter : '', true, false).draw();
+        });
+      }
     });
   </script>
 <!--   <script>
