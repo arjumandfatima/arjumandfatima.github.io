@@ -434,7 +434,7 @@ function arrangeColumns() {
       var table = $('#tagsTable').DataTable({
         ajax: 'MinimalChangesData_TagsPosts.json',
         columns: [
-          { data: 2 },  // TagName
+          { data: 2 , name: 'TagName'},  // TagName
           { data: 3 },  // TagCount
           {
             data: 7,
@@ -499,8 +499,12 @@ function arrangeColumns() {
       });
 function buildAlphabetNav(api) {
   const alphabet = {};
+	const tagNameColumnIndex = api.column('TagName:name').index();
+
   api.rows().every(function () {
-    const tag = this.data()[2]; // TagName
+	      const tag = this.data()[tagNameColumnIndex];
+
+    // const tag = this.data()[2]; // TagName
     if (!tag) return;
     const firstChar = tag[0].toUpperCase();
     alphabet[firstChar] = true;
@@ -529,7 +533,11 @@ function buildAlphabetNav(api) {
     const letter = $(this).data('letter');
 	  console.log(letter );
 	  
-    api.column(2).search(letter ? '^' + letter : '', true, false).draw();
+    // api.column(2).search(letter ? '^' + letter : '', true, false).draw();
+
+    const regex = letter ? '^' + letter.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') : ''; // escape regex
+
+    api.column(tagNameColumnIndex).search(regex, true, false).draw();
   });
 }
       // function buildAlphabetNav(api) {
