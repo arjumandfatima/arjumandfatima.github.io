@@ -206,6 +206,7 @@ div.alphabet-nav span.active {
         <th>Tag Excerpt</th>
        <th>Wiki Post Exists</th>
         <th>Wiki Post </th>
+        <th> </th>
        
       </tr>
     </thead>
@@ -473,6 +474,17 @@ function arrangeColumns() {
 
 		
           }
+		{
+    data: 2,
+    orderable: false,
+    searchable: false,
+    render: function (data) {
+      const url = `https://stackoverflow.com/tags/${encodeURIComponent(data)}/info`;
+      return `<a href="${url}" target="_blank">
+                <button>View Info</button>
+              </a>`;
+    }
+  }
         ],
         initComplete: function () {
           buildAlphabetNav(this.api());
