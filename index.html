@@ -430,7 +430,7 @@ const tagNameColumnIndex =2;
 		    console.log("inside on click");
 	  _alphabetSearch = $(this).data('letter');
 	   console.log(_alphabetSearch);
-$('.datatable').dataTable().fnFilter("^"+_alphabetSearch, 0, true).draw();
+$('#tagsTable').dataTable().fnFilter("^"+_alphabetSearch, 0, true).draw();
 
 	   // api
     //     .columns(2)
