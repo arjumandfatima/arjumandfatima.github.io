@@ -519,11 +519,11 @@ const tagNameColumnIndex =2;
   $nav.empty();
 
 	// Add "All" button
-  $('<button type="button" class="btn btn-outline-primary active" data-letter="">All</button>').appendTo($nav);
+  $('<button type="button" class="btn btn-outline-dark active" data-letter="">All</button>').appendTo($nav);
 
   // Add buttons for each character
   nav.forEach(letter => {
-    $(`<button type="button" class="btn btn-outline-primary" data-letter="${letter}">${letter}</button>`).appendTo($nav);
+    $(`<button type="button" class="btn btn-outline-dark" data-letter="${letter}">${letter}</button>`).appendTo($nav);
   });
 
   // Button click event
