@@ -142,11 +142,11 @@ div.alphabet-nav span.active {
     <thead>
       <tr>
         <th>Tag Name</th>
-        <th>Tag Count</th>
-        <th>Excerpt Body</th>
-        <th>Excerpt Exists</th>
-        <th>Wiki Body (HTML)</th>
-        <th>Wiki Exists</th>
+        <th>Tag Count</th>  <th>Excerpt Exists</th>
+        <th>Tag Excerpt</th>
+       <th>Wiki Post Exists</th>
+        <th>Wiki Post </th>
+       
       </tr>
     </thead>
   </table>
@@ -370,28 +370,28 @@ function arrangeColumns() {
           { data: 2 },  // TagName
           { data: 3 },  // TagCount
           {
+            data: 7,
+            render: function (data) {
+              return data.trim() ? '✔️' : '❌';
+            }
+          }, {
             data: 7,  // ExcerptPostBody
             render: function (data, type) {
               return data ? '<span title="' + data + '">' + data + '</span>' : '';
             }
           },
-          {
-            data: 7,
-            render: function (data) {
-              return data.trim() ? '✔️' : '❌';
-            }
-          },
-          {
-            data: 6,  // WikiPostBody (HTML)
-            className: 'body-html',
-            render: function (data, type) {
-              return type === 'display' ? data : data;
-            }
-          },
+         
+         
           {
             data: 6,
             render: function (data) {
               return data.trim() ? '✔️' : '❌';
+            }
+          }, {
+            data: 6,  // WikiPostBody (HTML)
+            className: 'body-html',
+            render: function (data, type) {
+              return type === 'display' ? data : data;
             }
           }
         ],
