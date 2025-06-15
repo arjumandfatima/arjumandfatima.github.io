@@ -299,20 +299,20 @@ function arrangeColumns() {
 
 
     <script>
-	var _alphabetSearch = '';
+// 	var _alphabetSearch = '';
     
-	    $.fn.dataTable.ext.search.push( function ( settings, searchData ) {
-		    console.log("inside search");
-    if ( ! _alphabetSearch ) {
-        return true;
-    }
+// 	    $.fn.dataTable.ext.search.push( function ( settings, searchData ) {
+// 		    console.log("inside search");
+//     if ( ! _alphabetSearch ) {
+//         return true;
+//     }
  
-    if ( searchData[0].charAt(0) === _alphabetSearch ) {
-        return true;
-    }
+//     if ( searchData[0].charAt(0) === _alphabetSearch ) {
+//         return true;
+//     }
  
-    return false;
-} );
+//     return false;
+// } );
  
     $(document).ready(function() {
       var table = $('#tagsTable').DataTable({
@@ -422,10 +422,42 @@ const tagNameColumnIndex =2;
   //   // api.column(tagNameColumnIndex).search(regex, true, false).draw();
 	 //        api.column(2).search(letter ? '^' + letter : '', true, false).draw();
   // });
-	 _alphabetSearch = $(this).data('letter');
-		    console.log("before table draw");
+
+	  // Button click event
+  $nav.on('click').on('click', 'button', function () {
+    $nav.find('button').removeClass('active');
+    $(this).addClass('active');
+		    console.log("inside on click");
+	  _alphabetSearch = $(this).data('letter');
+	   console.log(_alphabetSearch);
+
+	   api
+        .columns(2)
+        .search( _alphabetSearch )
+        .draw();
+	  
+ // if ( ! _alphabetSearch ) {
+ //        return true;
+ //    }
+ 
+ //    if ( searchData[0].charAt(0) === _alphabetSearch ) {
+ //        return true;
+ //    }
+ 
+ //    return false;
+    // const letter = $(this).data('letter');
+    // const regex = letter ? '^' + letter.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') : '';
+
+    // ✅ Use column index + regex search
+    // api.column(tagNameColumnIndex).search(regex, true, false).draw();
+	        // api.column(2).search(letter ? '^' + letter : '', true, false).draw();
+  });
+
 	
-        table.draw();
+	 // _alphabetSearch = $(this).data('letter');
+		//     console.log("before table draw");
+	
+  //       table.draw();
 }
 //   // "All" button
 //   $('<a  class="btn btn-outline-dark active" data-letter="">All</a>').appendTo($nav);
