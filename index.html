@@ -290,7 +290,10 @@ function arrangeColumns() {
       });
 
       const table = $('#tagsTable').DataTable({
-        ajax: '/MinimalChangesData.txt',
+        // ajax: '/MinimalChangesData.txt',
+        MinimalChangesData_TagsPosts
+        ajax: '/MinimalChangesData_TagsPosts.json',
+          
         dataSrc: '',
         columns: [
           { data: 2 }, // TagName
