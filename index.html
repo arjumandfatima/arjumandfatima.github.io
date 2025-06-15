@@ -10,7 +10,7 @@ body {
   width: 100%;
   height: 500px;
 } 
-
+/* 
 div.alphabet-nav {
    clear:both;
 	position:relative;
@@ -59,7 +59,7 @@ div.alphabet-nav div.alphabet-nav-info {
 	opacity:0;
 	transition:opacity .4s ease-in-out;
 	z-index:9999;
-}
+} */
 
 /* tr.alphabet-group, tr.alphabet-group:hover {
 	background-color:rgba(0,0,0,0.15) !important;
@@ -67,7 +67,7 @@ div.alphabet-nav div.alphabet-nav-info {
  */
 
   
-div.alphabet-nav {
+/* div.alphabet-nav {
     display: table;
     width: 100%;
     margin-bottom: 1em;
@@ -87,7 +87,12 @@ div.alphabet-nav span:hover {
  
 div.alphabet-nav span.active {
     color: black;
-} 
+}  */
+
+	#alphabet-nav {
+  flex-wrap: wrap;
+  gap: 4px;
+}
 </style>
 
 <style>
@@ -197,7 +202,9 @@ div.alphabet-nav span.active {
             </tr>
         </tfoot>
     </table> -->
-<div id="alphabet-nav"></div>
+<!-- <div id="alphabet-nav"></div> -->
+	    <div id="alphabet-nav" class="btn-group btn-group-sm mb-2" role="group" aria-label="Alphabet Search"></div>
+
       <table id="tagsTable" class="display" >
     <thead>
       <tr>
@@ -490,38 +497,69 @@ function arrangeColumns() {
           buildAlphabetNav(this.api());
         }
       });
+function buildAlphabetNav(api) {
+  const alphabet = {};
+  api.rows().every(function () {
+    const tag = this.data()[2]; // TagName
+    if (!tag) return;
+    const firstChar = tag[0].toUpperCase();
+    alphabet[firstChar] = true;
+  });
 
-      function buildAlphabetNav(api) {
-        const alphabet = {};
-        api.rows().every(function () {
-          const tag = this.data()[2]; // TagName
-          if (!tag) return;
-          const firstChar = tag[0].toUpperCase();
-          if (!alphabet[firstChar]) alphabet[firstChar] = true;
-        });
+  const specialChars = Object.keys(alphabet).filter(ch => !/[A-Z0-9]/.test(ch)).sort();
+  const letters = Object.keys(alphabet).filter(ch => /[A-Z]/.test(ch)).sort();
+  const digits = Object.keys(alphabet).filter(ch => /[0-9]/.test(ch)).sort();
 
-        const specialChars = Object.keys(alphabet).filter(ch => !/[A-Z0-9]/.test(ch)).sort();
-        const letters = Object.keys(alphabet).filter(ch => /[A-Z]/.test(ch)).sort();
-        const digits = Object.keys(alphabet).filter(ch => /[0-9]/.test(ch)).sort();
+  const nav = specialChars.concat(letters).concat(digits);
+  const $nav = $('#alphabet-nav');
+  $nav.empty();
 
-        const nav = specialChars.concat(letters).concat(digits);
-        const $nav = $('#alphabet-nav');
-        $nav.empty();
+  // "All" button
+  $('<button type="button" class="btn btn-outline-primary active" data-letter="">All</button>').appendTo($nav);
 
-        $('<a class="active" data-letter="">All</a>').appendTo($nav);
+  nav.forEach(letter => {
+    $(`<button type="button" class="btn btn-outline-primary" data-letter="${letter}">${letter}</button>`).appendTo($nav);
+  });
 
-        nav.forEach(letter => {
-          $('<a data-letter="' + letter + '">' + letter + '</a>').appendTo($nav);
-        });
+  // Click behavior
+  $nav.on('click', 'button', function () {
+    $('#alphabet-nav button').removeClass('active');
+    $(this).addClass('active');
+    const letter = $(this).data('letter');
+    api.column(2).search(letter ? '^' + letter : '', true, false).draw();
+  });
+}
+      // function buildAlphabetNav(api) {
+      //   const alphabet = {};
+      //   api.rows().every(function () {
+      //     const tag = this.data()[2]; // TagName
+      //     if (!tag) return;
+      //     const firstChar = tag[0].toUpperCase();
+      //     if (!alphabet[firstChar]) alphabet[firstChar] = true;
+      //   });
 
-        $nav.on('click', 'a', function () {
-          $('#alphabet-nav a').removeClass('active');
-          $(this).addClass('active');
-          const letter = $(this).data('letter');
+      //   const specialChars = Object.keys(alphabet).filter(ch => !/[A-Z0-9]/.test(ch)).sort();
+      //   const letters = Object.keys(alphabet).filter(ch => /[A-Z]/.test(ch)).sort();
+      //   const digits = Object.keys(alphabet).filter(ch => /[0-9]/.test(ch)).sort();
 
-          api.column(2).search(letter ? '^' + letter : '', true, false).draw();
-        });
-      }
+      //   const nav = specialChars.concat(letters).concat(digits);
+      //   const $nav = $('#alphabet-nav');
+      //   $nav.empty();
+
+      //   $('<a class="active" data-letter="">All</a>').appendTo($nav);
+
+      //   nav.forEach(letter => {
+      //     $('<a data-letter="' + letter + '">' + letter + '</a>').appendTo($nav);
+      //   });
+
+      //   $nav.on('click', 'a', function () {
+      //     $('#alphabet-nav a').removeClass('active');
+      //     $(this).addClass('active');
+      //     const letter = $(this).data('letter');
+
+      //     api.column(2).search(letter ? '^' + letter : '', true, false).draw();
+      //   });
+      // }
     });
   </script>
 <!--   <script>
