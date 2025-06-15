@@ -481,7 +481,7 @@ function arrangeColumns() {
     render: function (data) {
       const url = `https://stackoverflow.com/tags/${encodeURIComponent(data)}/info`;
       return `<a href="${url}" target="_blank">
-                <button>Explore</button>
+                <button type="button" class="btn btn-dark">Explore</button>
               </a>`;
     }
   }
