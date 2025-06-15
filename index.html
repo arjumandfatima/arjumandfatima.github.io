@@ -434,7 +434,7 @@ function arrangeColumns() {
       var table = $('#tagsTable').DataTable({
         ajax: 'MinimalChangesData_TagsPosts.json',
         columns: [
-          { data: 2 , name: 'TagName'},  // TagName
+          { data: 2 },  // TagName
           { data: 3 },  // TagCount
           {
             data: 7,
@@ -499,8 +499,8 @@ function arrangeColumns() {
       });
 function buildAlphabetNav(api) {
   const alphabet = {};
-	const tagNameColumnIndex = api.column('TagName:name').index();
-
+	// const tagNameColumnIndex = api.column('TagName:name').index();
+const tagNameColumnIndex =2;
   api.rows().every(function () {
 	      const tag = this.data()[tagNameColumnIndex];
 
@@ -518,28 +518,48 @@ function buildAlphabetNav(api) {
   const $nav = $('#alphabet-nav');
   $nav.empty();
 
-  // "All" button
-  $('<a  class="btn btn-outline-dark active" data-letter="">All</a>').appendTo($nav);
+	// Add "All" button
+  $('<button type="button" class="btn btn-outline-primary active" data-letter="">All</button>').appendTo($nav);
 
+  // Add buttons for each character
   nav.forEach(letter => {
-    $(`<a  class="btn btn-outline-dark" data-letter="${letter}">${letter}</a>`).appendTo($nav);
+    $(`<button type="button" class="btn btn-outline-primary" data-letter="${letter}">${letter}</button>`).appendTo($nav);
   });
 
-  // Click behavior
-  $nav.on('click', 'a', function () {
-	  console.log('clicked' );
-    $('#alphabet-nav a').removeClass('active');
+  // Button click event
+  $nav.off('click').on('click', 'button', function () {
+    $nav.find('button').removeClass('active');
     $(this).addClass('active');
+
     const letter = $(this).data('letter');
-	  console.log(letter );
-	  
-    // api.column(2).search(letter ? '^' + letter : '', true, false).draw();
+    const regex = letter ? '^' + letter.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') : '';
 
-    const regex = letter ? '^' + letter.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') : ''; // escape regex
-
+    // ✅ Use column index + regex search
     api.column(tagNameColumnIndex).search(regex, true, false).draw();
   });
 }
+//   // "All" button
+//   $('<a  class="btn btn-outline-dark active" data-letter="">All</a>').appendTo($nav);
+
+//   nav.forEach(letter => {
+//     $(`<a  class="btn btn-outline-dark" data-letter="${letter}">${letter}</a>`).appendTo($nav);
+//   });
+
+//   // Click behavior
+//   $nav.on('click', 'a', function () {
+// 	  console.log('clicked' );
+//     $('#alphabet-nav a').removeClass('active');
+//     $(this).addClass('active');
+//     const letter = $(this).data('letter');
+// 	  console.log(letter );
+	  
+//     // api.column(2).search(letter ? '^' + letter : '', true, false).draw();
+
+//     const regex = letter ? '^' + letter.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') : ''; // escape regex
+
+//     api.column(tagNameColumnIndex).search(regex, true, false).draw();
+//   });
+// }
       // function buildAlphabetNav(api) {
       //   const alphabet = {};
       //   api.rows().every(function () {
