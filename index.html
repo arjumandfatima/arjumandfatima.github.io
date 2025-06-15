@@ -302,6 +302,7 @@ function arrangeColumns() {
 	var _alphabetSearch = '';
     
 	    $.fn.dataTable.ext.search.push( function ( settings, searchData ) {
+		    console.log("inside search");
     if ( ! _alphabetSearch ) {
         return true;
     }
@@ -422,6 +423,8 @@ const tagNameColumnIndex =2;
 	 //        api.column(2).search(letter ? '^' + letter : '', true, false).draw();
   // });
 	 _alphabetSearch = $(this).data('letter');
+		    console.log("before table draw");
+	
         table.draw();
 }
 //   // "All" button
