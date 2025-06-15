@@ -532,10 +532,11 @@ const tagNameColumnIndex =2;
     $(this).addClass('active');
 
     const letter = $(this).data('letter');
-    const regex = letter ? '^' + letter.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') : '';
+    // const regex = letter ? '^' + letter.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') : '';
 
     // ✅ Use column index + regex search
-    api.column(tagNameColumnIndex).search(regex, true, false).draw();
+    // api.column(tagNameColumnIndex).search(regex, true, false).draw();
+	        api.column(2).search(letter ? '^' + letter : '', true, false).draw();
   });
 }
 //   // "All" button
