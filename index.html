@@ -262,7 +262,9 @@ $.fn.dataTable.ext.search.push( function ( settings, searchData ) {
 $(document).ready(function() {
     // var table = $('#example').DataTable();
  var table =  new DataTable('#example', {
-    ajax: '../arrays.txt'
+    // ajax: '../arrays.txt'
+    ajax: '../MinimalChangesData.json'
+   
 });
     var alphabet = $('<div class="alphabet"/>').append( 'Search: ' );
  
