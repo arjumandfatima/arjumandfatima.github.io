@@ -515,15 +515,15 @@ function buildAlphabetNav(api) {
   $nav.empty();
 
   // "All" button
-  $('<button type="button" class="btn btn-outline-dark active" data-letter="">All</button>').appendTo($nav);
+  $('<a  class="btn btn-outline-dark active" data-letter="">All</a>').appendTo($nav);
 
   nav.forEach(letter => {
-    $(`<button type="button" class="btn btn-outline-dark" data-letter="${letter}">${letter}</button>`).appendTo($nav);
+    $(`<a  class="btn btn-outline-dark" data-letter="${letter}">${letter}</a>`).appendTo($nav);
   });
 
   // Click behavior
-  $nav.on('click', 'button', function () {
-    $('#alphabet-nav button').removeClass('active');
+  $nav.on('click', 'a', function () {
+    $('#alphabet-nav a').removeClass('active');
     $(this).addClass('active');
     const letter = $(this).data('letter');
     api.column(2).search(letter ? '^' + letter : '', true, false).draw();
