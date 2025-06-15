@@ -12,6 +12,62 @@ body {
 } 
 
 div.alphabet-nav {
+   clear:both;
+	position:relative;
+	margin:0.5em 0;
+}
+
+@media screen and (max-width:767px){
+	div.alphabet-nav {
+		text-align:center;
+	}
+}
+
+div.alphabet-nav ul.pagination {
+	margin:0;
+}
+
+div.alphabet-nav ul.pagination > li {
+	display:inline-block;
+}
+
+div.alphabet-nav a span {
+	opacity:1;
+}
+
+div.alphabet-nav a.empty span {
+	opacity:0.3;
+}
+
+div.alphabet-nav a.empty.active span {
+	opacity:1;
+}
+
+div.alphabet-nav .alphabet-nav-info-display {
+	vertical-align:top;
+	margin-right:0.5em;
+}
+
+div.alphabet-nav div.alphabet-nav-info {
+	position:absolute;
+	background-color:#111;
+	border-radius:3px;
+	color:#FFF;
+	margin-top:0.2em;
+	padding:0.2em 0.4em;
+	text-align:center;
+	opacity:0;
+	transition:opacity .4s ease-in-out;
+	z-index:9999;
+}
+
+/* tr.alphabet-group, tr.alphabet-group:hover {
+	background-color:rgba(0,0,0,0.15) !important;
+}
+ */
+
+  
+div.alphabet-nav {
     display: table;
     width: 100%;
     margin-bottom: 1em;
