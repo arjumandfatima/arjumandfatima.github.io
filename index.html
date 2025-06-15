@@ -432,10 +432,18 @@ function arrangeColumns() {
               return data.trim() ? '✔️' : '❌';
             }
           }, {
-            data: 7,  // ExcerptPostBody
-            render: function (data, type) {
-              return data ? '<span title="' + data + '">' + data + '</span>' : '';
-            }
+            // data: 7,  // ExcerptPostBody
+            // render: function (data, type) {
+            //   return data ? '<span title="' + data + '">' + data + '</span>' : '';
+            // }
+
+
+		    data: 7,
+    render: function (data, type) {
+      if (!data) return '';
+      const short = data.substring(0, 100);
+      return `<span title="${data.replace(/"/g, '&quot;')}">${short}${data.length > 100 ? '…' : ''}</span>`;
+    }
           },
          
          
@@ -445,11 +453,23 @@ function arrangeColumns() {
               return data.trim() ? '✔️' : '❌';
             }
           }, {
-            data: 6,  // WikiPostBody (HTML)
-            className: 'body-html',
-            render: function (data, type) {
-              return type === 'display' ? data : data;
-            }
+            // data: 6,  // WikiPostBody (HTML)
+            // className: 'body-html',
+            // render: function (data, type) {
+            //   return type === 'display' ? data : data;
+            // }
+ data: 6,
+    className: 'body-html',
+    render: function (data, type) {
+      if (!data) return '';
+      const tempDiv = document.createElement("div");
+      tempDiv.innerHTML = data;
+      const plainText = tempDiv.textContent || tempDiv.innerText || "";
+      const short = plainText.substring(0, 100).replace(/"/g, '&quot;');
+      return `<span title="${plainText.replace(/"/g, '&quot;')}">${short}${plainText.length > 100 ? '…' : ''}</span>`;
+    }
+
+		
           }
         ],
         initComplete: function () {
