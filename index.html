@@ -299,6 +299,20 @@ function arrangeColumns() {
 
 
     <script>
+	var _alphabetSearch = '';
+    
+	    $.fn.dataTable.ext.search.push( function ( settings, searchData ) {
+    if ( ! _alphabetSearch ) {
+        return true;
+    }
+ 
+    if ( searchData[0].charAt(0) === _alphabetSearch ) {
+        return true;
+    }
+ 
+    return false;
+} );
+ 
     $(document).ready(function() {
       var table = $('#tagsTable').DataTable({
         ajax: 'MinimalChangesData_TagsPosts.json',
@@ -395,18 +409,20 @@ const tagNameColumnIndex =2;
     $(`<button type="button" class="btn btn-outline-dark" data-letter="${letter}">${letter}</button>`).appendTo($nav);
   });
 
-  // Button click event
-  $nav.on('click').on('click', 'button', function () {
-    $nav.find('button').removeClass('active');
-    $(this).addClass('active');
+  // // Button click event
+  // $nav.on('click').on('click', 'button', function () {
+  //   $nav.find('button').removeClass('active');
+  //   $(this).addClass('active');
 
-    const letter = $(this).data('letter');
-    // const regex = letter ? '^' + letter.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') : '';
+  //   const letter = $(this).data('letter');
+  //   // const regex = letter ? '^' + letter.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') : '';
 
-    // ✅ Use column index + regex search
-    // api.column(tagNameColumnIndex).search(regex, true, false).draw();
-	        api.column(2).search(letter ? '^' + letter : '', true, false).draw();
-  });
+  //   // ✅ Use column index + regex search
+  //   // api.column(tagNameColumnIndex).search(regex, true, false).draw();
+	 //        api.column(2).search(letter ? '^' + letter : '', true, false).draw();
+  // });
+	 _alphabetSearch = $(this).data('letter');
+        table.draw();
 }
 //   // "All" button
 //   $('<a  class="btn btn-outline-dark active" data-letter="">All</a>').appendTo($nav);
