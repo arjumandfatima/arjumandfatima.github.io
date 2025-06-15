@@ -523,9 +523,12 @@ function buildAlphabetNav(api) {
 
   // Click behavior
   $nav.on('click', 'a', function () {
+	  console.log('clicked' );
     $('#alphabet-nav a').removeClass('active');
     $(this).addClass('active');
     const letter = $(this).data('letter');
+	  console.log(letter );
+	  
     api.column(2).search(letter ? '^' + letter : '', true, false).draw();
   });
 }
