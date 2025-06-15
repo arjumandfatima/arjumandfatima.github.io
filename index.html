@@ -370,26 +370,26 @@ function arrangeColumns() {
           { data: 2 },  // TagName
           { data: 3 },  // TagCount
           {
-            data: 6,  // ExcerptPostBody
+            data: 7,  // ExcerptPostBody
             render: function (data, type) {
               return data ? '<span title="' + data + '">' + data + '</span>' : '';
             }
           },
           {
-            data: 6,
+            data: 7,
             render: function (data) {
               return data.trim() ? '✔️' : '❌';
             }
           },
           {
-            data: 7,  // WikiPostBody (HTML)
+            data: 6,  // WikiPostBody (HTML)
             className: 'body-html',
             render: function (data, type) {
               return type === 'display' ? data : data;
             }
           },
           {
-            data: 7,
+            data: 6,
             render: function (data) {
               return data.trim() ? '✔️' : '❌';
             }
