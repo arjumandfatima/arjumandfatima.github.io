@@ -421,7 +421,7 @@ function arrangeColumns() {
 
     <script>
     $(document).ready(function() {
-      vaar table = $('#tagsTable').DataTable({
+      var table = $('#tagsTable').DataTable({
         ajax: 'MinimalChangesData_TagsPosts.json',
         columns: [
           { data: 2 },  // TagName
