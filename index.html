@@ -228,7 +228,38 @@ function arrangeColumns() {
 
 
     <script>
-
+var _alphabetSearch = '';
+ 
+$.fn.dataTable.ext.search.push( function ( settings, searchData ) {
+    if ( ! _alphabetSearch ) {
+        return true;
+    }
+ 
+    if ( searchData[0].charAt(0) === _alphabetSearch ) {
+        return true;
+    }
+ 
+    return false;
+} );
+ 
+ 
+function bin ( data ) {
+    var letter, bins = {};
+ 
+    for ( var i=0, ien=data.length ; i<ien ; i++ ) {
+        letter = data[i].charAt(0).toUpperCase();
+ 
+        if ( bins[letter] ) {
+            bins[letter]++;
+        }
+        else {
+            bins[letter] = 1;
+        }
+    }
+ 
+    return bins;
+}
+ 
     $(document).ready(function() {
       var table = $('#tagsTable').DataTable({
         ajax: 'MinimalChangesData_TagsPosts.json',
