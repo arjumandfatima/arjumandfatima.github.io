@@ -380,6 +380,7 @@ function bin ( data ) {
 	// const tagNameColumnIndex = api.column('TagName:name').index();
 	const tagNameColumnIndex =2;
   	table.rows().every(function () {
+		
 	      const tag = this.data()[tagNameColumnIndex];
 	    // const tag = this.data()[2]; // TagName
 	    if (!tag) return;
@@ -390,6 +391,14 @@ function bin ( data ) {
   const specialChars = Object.keys(tabs).filter(ch => !/[A-Z0-9]/.test(ch)).sort();
 	  const letters = Object.keys(tabs).filter(ch => /[A-Z]/.test(ch)).sort();
 	  const digits = Object.keys(tabs).filter(ch => /[0-9]/.test(ch)).sort();
+ console.log("specialChars");
+ console.log(specialChars);
+ console.log("letters");
+ console.log(letters);
+	    
+ console.log("digits");
+ console.log(digits);
+	    
 	
 	  const navelements = specialChars.concat(letters).concat(digits);
  console.log("navelements");
