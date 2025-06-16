@@ -375,6 +375,18 @@ function bin ( data ) {
         .data( 'match-count', columnData.length )
         .html( 'None' )
         .appendTo( alphabet );
+
+	    const tabs = {};
+	// const tagNameColumnIndex = api.column('TagName:name').index();
+	const tagNameColumnIndex =2;
+  	api.rows().every(function () {
+	      const tag = this.data()[tagNameColumnIndex];
+	    // const tag = this.data()[2]; // TagName
+	    if (!tag) return;
+	    const firstChar = tag[0].toUpperCase();
+	    tabs[firstChar] = true;
+	  });
+	    
   const specialChars = Object.keys(tabs).filter(ch => !/[A-Z0-9]/.test(ch)).sort();
 	  const letters = Object.keys(tabs).filter(ch => /[A-Z]/.test(ch)).sort();
 	  const digits = Object.keys(tabs).filter(ch => /[0-9]/.test(ch)).sort();
