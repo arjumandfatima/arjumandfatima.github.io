@@ -318,208 +318,152 @@ function arrangeColumns() {
       var table = $('#tagsTable').DataTable({
         ajax: 'MinimalChangesData_TagsPosts.json',
         columns: [
-          { data: 2 },  // TagName
-          { data: 3 },  // TagCount
-          {
-            data: 7,
-            render: function (data) {
-              return data.trim() ? '✔️' : '❌';
-            }
-          }, {
-            // data: 7,  // ExcerptPostBody
-            // render: function (data, type) {
-            //   return data ? '<span title="' + data + '">' + data + '</span>' : '';
-            // }
-
-
-		    data: 7,
-    render: function (data, type) {
-      if (!data) return '';
-      const short = data.substring(0, 100);
-      return `<span title="${data.replace(/"/g, '&quot;')}">${short}${data.length > 100 ? '…' : ''}</span>`;
-    }
-          },
-         
-         
-          {
-            data: 6,
-            render: function (data) {
-              return data.trim() ? '✔️' : '❌';
-            }
-          }, {
-            // data: 6,  // WikiPostBody (HTML)
-            // className: 'body-html',
-            // render: function (data, type) {
-            //   return type === 'display' ? data : data;
-            // }
- data: 6,
-    className: 'body-html',
-    render: function (data, type) {
-      if (!data) return '';
-      const tempDiv = document.createElement("div");
-      tempDiv.innerHTML = data;
-      const plainText = tempDiv.textContent || tempDiv.innerText || "";
-      const short = plainText.substring(0, 100).replace(/"/g, '&quot;');
-      return `<span title="${plainText.replace(/"/g, '&quot;')}">${short}${plainText.length > 100 ? '…' : ''}</span>`;
-    }
-
-		
-          },
+	          { data: 2 },  // TagName
+	          { data: 3 },  // TagCount
+	          { data: 7,
+	            	render: function (data) {
+	              	return data.trim() ? '✔️' : '❌';
+	            	}
+	          }, 
 		{
-    data: 2,
-    orderable: false,
-    searchable: false,
-    render: function (data) {
-      const url = `https://stackoverflow.com/tags/${encodeURIComponent(data)}/info`;
-      return `<a href="${url}" target="_blank">
-                <button type="button" class="btn btn-dark">Explore</button>
-              </a>`;
-    }
-  }
+			            // data: 7,  // ExcerptPostBody
+			            // render: function (data, type) {
+			            //   return data ? '<span title="' + data + '">' + data + '</span>' : '';
+			            // }
+		 data: 7,
+			    render: function (data, type) {
+			      if (!data) return '';
+			      const short = data.substring(0, 100);
+			      return `<span title="${data.replace(/"/g, '&quot;')}">${short}${data.length > 100 ? '…' : ''}</span>`;
+			    }
+	          },
+		{
+	        data: 6,
+		            render: function (data) {
+		              return data.trim() ? '✔️' : '❌';
+		            }
+		}, 
+		{
+		            // data: 6,  // WikiPostBody (HTML)
+		            // className: 'body-html',
+		            // render: function (data, type) {
+		            //   return type === 'display' ? data : data;
+		            // }
+		 data: 6,
+			    className: 'body-html',
+			    render: function (data, type) {
+				      if (!data) return '';
+				      const tempDiv = document.createElement("div");
+				      tempDiv.innerHTML = data;
+				      const plainText = tempDiv.textContent || tempDiv.innerText || "";
+				      const short = plainText.substring(0, 100).replace(/"/g, '&quot;');
+				      return `<span title="${plainText.replace(/"/g, '&quot;')}">${short}${plainText.length > 100 ? '…' : ''}</span>`;
+			    }
+	          },
+		{
+		    data: 2,
+			    orderable: false,
+			    searchable: false,
+			    render: function (data) {
+			      const url = `https://stackoverflow.com/tags/${encodeURIComponent(data)}/info`;
+			      return `<a href="${url}" target="_blank">
+			                <button type="button" class="btn btn-dark">Explore</button>
+			              </a>`;
+			    }
+		  }
         ],
         initComplete: function () {
           buildAlphabetNav(this.api());
         }
       });
 function buildAlphabetNav(api) {
-  const alphabet = {};
+	const alphabet = {};
 	// const tagNameColumnIndex = api.column('TagName:name').index();
-const tagNameColumnIndex =2;
-  api.rows().every(function () {
+	const tagNameColumnIndex =2;
+  	api.rows().every(function () {
 	      const tag = this.data()[tagNameColumnIndex];
+	    // const tag = this.data()[2]; // TagName
+	    if (!tag) return;
+	    const firstChar = tag[0].toUpperCase();
+	    alphabet[firstChar] = true;
+	  });
 
-    // const tag = this.data()[2]; // TagName
-    if (!tag) return;
-	  console.log("alphabets");
-    const firstChar = tag[0].toUpperCase();
-	  console.log(firstChar);
-	  
-    alphabet[firstChar] = true;
-  });
-
-  const specialChars = Object.keys(alphabet).filter(ch => !/[A-Z0-9]/.test(ch)).sort();
-  const letters = Object.keys(alphabet).filter(ch => /[A-Z]/.test(ch)).sort();
-  const digits = Object.keys(alphabet).filter(ch => /[0-9]/.test(ch)).sort();
-
-  const nav = specialChars.concat(letters).concat(digits);
-	  console.log('nav');
-	  console.log(nav)
+	  const specialChars = Object.keys(alphabet).filter(ch => !/[A-Z0-9]/.test(ch)).sort();
+	  const letters = Object.keys(alphabet).filter(ch => /[A-Z]/.test(ch)).sort();
+	  const digits = Object.keys(alphabet).filter(ch => /[0-9]/.test(ch)).sort();
 	
-  const $nav = $('#alphabet-nav');
-  $nav.empty();
+	  const navelements = specialChars.concat(letters).concat(digits);
+	  const $nav = $('#alphabet-nav');
+	  $nav.empty();
 
-	// Add "All" button
-  $('<button type="button" class="btn btn-outline-dark active" data-letter="">All</button>').appendTo($nav);
-
-  // Add buttons for each character
-  nav.forEach(letter => {
-    $(`<button type="button" class="btn btn-outline-dark" data-letter="${letter}">${letter}</button>`).appendTo($nav);
-  });
-
-  // // Button click event
-  // $nav.on('click').on('click', 'button', function () {
-  //   $nav.find('button').removeClass('active');
-  //   $(this).addClass('active');
-
-  //   const letter = $(this).data('letter');
-  //   // const regex = letter ? '^' + letter.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') : '';
-
-  //   // ✅ Use column index + regex search
-  //   // api.column(tagNameColumnIndex).search(regex, true, false).draw();
-	 //        api.column(2).search(letter ? '^' + letter : '', true, false).draw();
-  // });
-
-	  // Button click event
-  $nav.on('click').on('click', 'button', function () {
-    $nav.find('button').removeClass('active');
-    $(this).addClass('active');
-		    console.log("inside on click");
-	  _alphabetSearch = $(this).data('letter');
-	   console.log(_alphabetSearch);
-// $('#tagsTable').dataTable().fnFilter("^"+_alphabetSearch, 0, true).draw();
-
-	   api
-        .columns(2)
-        .search( _alphabetSearch )
-        .draw();
-	  
- // if ( ! _alphabetSearch ) {
- //        return true;
- //    }
- 
- //    if ( searchData[0].charAt(0) === _alphabetSearch ) {
- //        return true;
- //    }
- 
- //    return false;
-    // const letter = $(this).data('letter');
-    // const regex = letter ? '^' + letter.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') : '';
-
-    // ✅ Use column index + regex search
-    // api.column(tagNameColumnIndex).search(regex, true, false).draw();
-	        // api.column(2).search(letter ? '^' + letter : '', true, false).draw();
-  });
-
+		// Add "All" button
+	  // $('<button type="button" class="btn btn-outline-dark active" data-letter="">All</button>').appendTo($nav);+
+	  $('<button type="button" class="btn btn-outline-dark active" data-letter="">All</button>').data( 'letter', '' ).appendTo($nav);
+		  
 	
-	 // _alphabetSearch = $(this).data('letter');
-		//     console.log("before table draw");
-	
-  //       table.draw();
+	  // Add buttons for each character
+	  navelements.forEach(letter => {
+	    // $(`<button type="button" class="btn btn-outline-dark" data-letter="${letter}">${letter}</button>`).appendTo($nav);
+	    $(`<button type="button" class="btn btn-outline-dark" data-letter="${letter}">${letter}</button>`). data( 'letter', ${letter} ).appendTo($nav);
+		  
+		   
+	  });
+
+			  // // Button click event
+			  // $nav.on('click').on('click', 'button', function () {
+			  //   $nav.find('button').removeClass('active');
+			  //   $(this).addClass('active');
+			
+			  //   const letter = $(this).data('letter');
+			  //   // const regex = letter ? '^' + letter.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') : '';
+			
+			  //   // ✅ Use column index + regex search
+			  //   // api.column(tagNameColumnIndex).search(regex, true, false).draw();
+				 //        api.column(2).search(letter ? '^' + letter : '', true, false).draw();
+			  // });
 }
-//   // "All" button
-//   $('<a  class="btn btn-outline-dark active" data-letter="">All</a>').appendTo($nav);
-
-//   nav.forEach(letter => {
-//     $(`<a  class="btn btn-outline-dark" data-letter="${letter}">${letter}</a>`).appendTo($nav);
-//   });
-
-//   // Click behavior
-//   $nav.on('click', 'a', function () {
-// 	  console.log('clicked' );
-//     $('#alphabet-nav a').removeClass('active');
-//     $(this).addClass('active');
-//     const letter = $(this).data('letter');
-// 	  console.log(letter );
+	  // Button click event
+	  $nav.on('click').on('click', 'button', function () {
+		$nav.find('button').removeClass('active');
+		$(this).addClass('active');
+		console.log("inside on click");
+		alphabetSearch = $(this).data('letter');
+		console.log(_alphabetSearch);
+		// $('#tagsTable').dataTable().fnFilter("^"+_alphabetSearch, 0, true).draw();
+	        $nav..find( '.active' ).removeClass( 'active' );
+	        $(this).addClass( 'active' );
+	        _alphabetSearch = $(this).data('letter');
+	        table.draw();
+		   // api
+	    //     .columns(2)
+	    //     .search( _alphabetSearch )
+	    //     .draw();
 	  
-//     // api.column(2).search(letter ? '^' + letter : '', true, false).draw();
-
-//     const regex = letter ? '^' + letter.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') : ''; // escape regex
-
-//     api.column(tagNameColumnIndex).search(regex, true, false).draw();
-//   });
+//   var table = $('#example').DataTable();
+//     var alphabet = $('<div class="alphabet"/>').append( 'Search: ' );
+//     $('<span class="clear active"/>')
+//         .data( 'letter', '' )
+//         .html( 'None' )
+//         .appendTo( alphabet );
+//     for ( var i=0 ; i<26 ; i++ ) {
+//         var letter = String.fromCharCode( 65 + i );
+//         $('<span/>')
+//             .data( 'letter', letter )
+//             .html( letter )
+//             .appendTo( alphabet );
+//     }
+//     alphabet.insertBefore( table.table().container() );
+//     alphabet.on( 'click', 'span', function () {
+//         alphabet.find( '.active' ).removeClass( 'active' );
+//         $(this).addClass( 'active' );
+//         _alphabetSearch = $(this).data('letter');
+//         table.draw();
+//     } );
 // }
-      // function buildAlphabetNav(api) {
-      //   const alphabet = {};
-      //   api.rows().every(function () {
-      //     const tag = this.data()[2]; // TagName
-      //     if (!tag) return;
-      //     const firstChar = tag[0].toUpperCase();
-      //     if (!alphabet[firstChar]) alphabet[firstChar] = true;
-      //   });
 
-      //   const specialChars = Object.keys(alphabet).filter(ch => !/[A-Z0-9]/.test(ch)).sort();
-      //   const letters = Object.keys(alphabet).filter(ch => /[A-Z]/.test(ch)).sort();
-      //   const digits = Object.keys(alphabet).filter(ch => /[0-9]/.test(ch)).sort();
-
-      //   const nav = specialChars.concat(letters).concat(digits);
-      //   const $nav = $('#alphabet-nav');
-      //   $nav.empty();
-
-      //   $('<a class="active" data-letter="">All</a>').appendTo($nav);
-
-      //   nav.forEach(letter => {
-      //     $('<a data-letter="' + letter + '">' + letter + '</a>').appendTo($nav);
-      //   });
-
-      //   $nav.on('click', 'a', function () {
-      //     $('#alphabet-nav a').removeClass('active');
-      //     $(this).addClass('active');
-      //     const letter = $(this).data('letter');
-
-      //     api.column(2).search(letter ? '^' + letter : '', true, false).draw();
-      //   });
-      // }
+     
     });
+
   </script>
 <!--   <script>
 
