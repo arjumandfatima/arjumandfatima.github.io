@@ -292,126 +292,34 @@ function arrangeColumns() {
        //    buildAlphabetNav(this.api());
        //  }
       });
-function buildAlphabetNav(api) {
-	const alphabet = {};
-	// const tagNameColumnIndex = api.column('TagName:name').index();
-	const tagNameColumnIndex =2;
-  	api.rows().every(function () {
-	      const tag = this.data()[tagNameColumnIndex];
-	    // const tag = this.data()[2]; // TagName
-	    if (!tag) return;
-	    const firstChar = tag[0].toUpperCase();
-	    alphabet[firstChar] = true;
-	  });
 
-	  const specialChars = Object.keys(alphabet).filter(ch => !/[A-Z0-9]/.test(ch)).sort();
-	  const letters = Object.keys(alphabet).filter(ch => /[A-Z]/.test(ch)).sort();
-	  const digits = Object.keys(alphabet).filter(ch => /[0-9]/.test(ch)).sort();
-	
-	  const navelements = specialChars.concat(letters).concat(digits);
-	  const $nav = $('#alphabet-nav');
-	  $nav.empty();
-
-		// Add "All" button
-	  // $('<button type="button" class="btn btn-outline-dark active" data-letter="">All</button>').appendTo($nav);+
-	  $('<button type="button" class="btn btn-outline-dark active" data-letter="">All</button>').data( 'letter', '' ).appendTo($nav);
-		  
-	
-	  // Add buttons for each character
-	  navelements.forEach(letter => {
-	    // $(`<button type="button" class="btn btn-outline-dark" data-letter="${letter}">${letter}</button>`).appendTo($nav);
-	    $(`<button type="button" class="btn btn-outline-dark" data-letter="${letter}">${letter}</button>`). data( 'letter', letter ).appendTo($nav);
-		  
-		   
-	  });
-
-			  // // Button click event
-			  // $nav.on('click').on('click', 'button', function () {
-			  //   $nav.find('button').removeClass('active');
-			  //   $(this).addClass('active');
-			
-			  //   const letter = $(this).data('letter');
-			  //   // const regex = letter ? '^' + letter.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') : '';
-			
-			  //   // ✅ Use column index + regex search
-			  //   // api.column(tagNameColumnIndex).search(regex, true, false).draw();
-				 //        api.column(2).search(letter ? '^' + letter : '', true, false).draw();
-			  // });
-
-	  // Button click event
-	  $nav.on('click').on('click', 'button', function () {
-		$nav.find('button').removeClass('active');
-		$(this).addClass('active');
-		console.log("inside on click");
-		alphabetSearch = $(this).data('letter');
-		console.log(alphabetSearch);
-		// $('#tagsTable').dataTable().fnFilter("^"+_alphabetSearch, 0, true).draw();
-	        $nav.find( '.active' ).removeClass( 'active' );
-	        $(this).addClass( 'active' );
-	        _alphabetSearch = $(this).data('letter');
-	        table.draw();
-		   api
-	        .columns(2)
-	        .search(alphabetSearch )
-	        .draw();
-
-		  table.columns(tagNameColumnIndex).search(alphabetSearch, true, false).draw();
-
-    });
-}
-    });
-  </script>
-<!--   <script>
-var _alphabetSearch = '';
-$.fn.dataTable.ext.search.push( function ( settings, searchData ) {
-    if ( ! _alphabetSearch ) {
-        return true;
-    }
-    if ( searchData[0].charAt(0) === _alphabetSearch ) {
-        return true;
-    }
-    return false;
-} );
-$(document).ready(function() {
-    // var table = $('#example').DataTable();
- var table =  new DataTable('#example', {
-    // ajax: '../arrays.txt'
-    ajax: '../MinimalChangesData.txt',
-    dataSrc: '',            // Because it's a flat array
-        columns: [
-          { data: 2 }, // TagName
-          { data: 3 }, // TagCount
-          { data: 5 }, // ExcerptPostBody
-          { data: 7 }  // WikiPostBody
-        ]
-});
+	     // var table = $('#example').DataTable();
+ 
     var alphabet = $('<div class="alphabet"/>').append( 'Search: ' );
+    var columnData = table.column(2).data();
+    var bins = bin( columnData );
+ 
     $('<span class="clear active"/>')
         .data( 'letter', '' )
-        .html( 'All' )
+        .data( 'match-count', columnData.length )
+        .html( 'None' )
         .appendTo( alphabet );
-    $('<span/>')
-        .data( 'number', '' )
-        // .html( 'All' )
-        .appendTo( alphabet );
- console.log('letter');
-    for ( var i=0 ; i<26 ; i++ ) {
-        var letter = String.fromCharCode( 65 + i );
- console.log(letter);
+  const specialChars = Object.keys(tabs).filter(ch => !/[A-Z0-9]/.test(ch)).sort();
+	  const letters = Object.keys(tabs).filter(ch => /[A-Z]/.test(ch)).sort();
+	  const digits = Object.keys(tabs).filter(ch => /[0-9]/.test(ch)).sort();
+	
+	  const navelements = specialChars.concat(letters).concat(digits);
+    for ( var i=0 ; i<navelements.length ; i++ ) {
+        // var letter = String.fromCharCode( 65 + i );
+ 
         $('<span/>')
-            .data( 'letter', letter )
-            .html( letter )
+            .data( 'letter', navelements[i] )
+            .data( 'match-count', bins[navelements[i]] || 0 )
+            .addClass( ! bins[navelements[i]] ? 'empty' : '' )
+            .html( navelements[i] )
             .appendTo( alphabet );
     }
-   console.log('number');
- for ( var x=32 ; x<65 ; x++ ) {
-     var number = String.fromCharCode(x );
- console.log(number);
-        $('<span/>')
-            .data( 'number', number )
-            .html( number )
-            .appendTo( alphabet ); 
-    }
+ 
     alphabet.insertBefore( table.table().container() );
  
     alphabet.on( 'click', 'span', function () {
@@ -419,10 +327,31 @@ $(document).ready(function() {
         $(this).addClass( 'active' );
  
         _alphabetSearch = $(this).data('letter');
-        _alphabetSearch = $(this).data('number');
-      
         table.draw();
     } );
-} );
-  </script> -->
+ 
+    var info = $('<div class="alphabetInfo"></div>')
+        .appendTo( alphabet );
+ 
+    alphabet
+        .on( 'mouseenter', 'span', function () {
+            info
+                .css( {
+                    opacity: 1,
+                    left: $(this).position().left,
+                    width: $(this).width()
+                } )
+                .html( $(this).data('match-count') )
+        } )
+        .on( 'mouseleave', 'span', function () {
+            info.css('opacity', 0);
+        } );
+
+	    
+	
+    } );
+	    
+
+  </script>
+
 </html>
