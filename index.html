@@ -288,9 +288,13 @@ $.fn.dataTable.ext.search.push( function ( settings, searchData ) {
  
 function bin ( data ) {
     var letter, bins = {};
- 
+ console.log("inside bins");
+	
     for ( var i=0, ien=data.length ; i<ien ; i++ ) {
         letter = data[i].charAt(0).toUpperCase();
+ console.log(data[i]);
+ console.log(letter);
+	    
  
         if ( bins[letter] ) {
             bins[letter]++;
