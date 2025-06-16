@@ -438,6 +438,9 @@ function buildAlphabetNav(api) {
 	        .columns(2)
 	        .search(alphabetSearch )
 	        .draw();
+
+		  dtable.columns(tagNameColumnIndex).search(alphabetSearch, true, false).draw();
+
 	  
 //   var table = $('#example').DataTable();
 //     var alphabet = $('<div class="alphabet"/>').append( 'Search: ' );
