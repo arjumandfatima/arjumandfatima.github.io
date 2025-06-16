@@ -434,10 +434,10 @@ function buildAlphabetNav(api) {
 	        $(this).addClass( 'active' );
 	        _alphabetSearch = $(this).data('letter');
 	        table.draw();
-		   // api
-	    //     .columns(2)
-	    //     .search( _alphabetSearch )
-	    //     .draw();
+		   api
+	        .columns(2)
+	        .search(alphabetSearch )
+	        .draw();
 	  
 //   var table = $('#example').DataTable();
 //     var alphabet = $('<div class="alphabet"/>').append( 'Search: ' );
