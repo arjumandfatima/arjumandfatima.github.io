@@ -390,7 +390,10 @@ const tagNameColumnIndex =2;
 
     // const tag = this.data()[2]; // TagName
     if (!tag) return;
+	  console.log("alphabets);
     const firstChar = tag[0].toUpperCase();
+	  console.log(firstChar);
+	  
     alphabet[firstChar] = true;
   });
 
@@ -399,6 +402,9 @@ const tagNameColumnIndex =2;
   const digits = Object.keys(alphabet).filter(ch => /[0-9]/.test(ch)).sort();
 
   const nav = specialChars.concat(letters).concat(digits);
+	  console.log('nav');
+	  console.log(nav)
+	
   const $nav = $('#alphabet-nav');
   $nav.empty();
 
@@ -430,12 +436,12 @@ const tagNameColumnIndex =2;
 		    console.log("inside on click");
 	  _alphabetSearch = $(this).data('letter');
 	   console.log(_alphabetSearch);
-$('#tagsTable').dataTable().fnFilter("^"+_alphabetSearch, 0, true).draw();
+// $('#tagsTable').dataTable().fnFilter("^"+_alphabetSearch, 0, true).draw();
 
-	   // api
-    //     .columns(2)
-    //     .search( _alphabetSearch )
-    //     .draw();
+	   api
+        .columns(2)
+        .search( _alphabetSearch )
+        .draw();
 	  
  // if ( ! _alphabetSearch ) {
  //        return true;
