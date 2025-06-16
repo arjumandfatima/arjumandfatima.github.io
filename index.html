@@ -379,7 +379,7 @@ function bin ( data ) {
 	    const tabs = {};
 	// const tagNameColumnIndex = api.column('TagName:name').index();
 	const tagNameColumnIndex =2;
-  	api.rows().every(function () {
+  	table.rows().every(function () {
 	      const tag = this.data()[tagNameColumnIndex];
 	    // const tag = this.data()[2]; // TagName
 	    if (!tag) return;
