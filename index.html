@@ -394,7 +394,7 @@ function bin ( data ) {
 	  const navelements = specialChars.concat(letters).concat(digits);
     for ( var i=0 ; i<navelements.length ; i++ ) {
         // var letter = String.fromCharCode( 65 + i );
- 
+ console.log(navelements[i]);
         $('<span/>')
             .data( 'letter', navelements[i] )
             .data( 'match-count', bins[navelements[i]] || 0 )
