@@ -90,9 +90,10 @@ body {
     <thead>
       <tr>
         <th>Tag Name</th>
-        <th>Tag Count</th>  <th>Excerpt Exists</th>
+        <th>Tag Count</th> 
+<!-- 	      <th>Excerpt Exists</th> -->
         <th>Tag Excerpt</th>
-       <th>Wiki Post Exists</th>
+<!--        <th>Wiki Post Exists</th> -->
         <th>Wiki Post </th>
         <th> </th>
        
@@ -223,108 +224,22 @@ function arrangeColumns() {
     }
 }</script>
 
-<!--   <script>
-    $(document).ready(function () {
-      const filterChars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789._#+-$*~'.split('');
-      const alphabetContainer = $('#alphabetSearch');
 
-      // Add "All" button first
-      alphabetContainer.append(`<span data-letter="All">All</span>`);
-      filterChars.forEach(ch => {
-        alphabetContainer.append(`<span data-letter="${ch}">${ch}</span>`);
-      });
-
-      const table = $('#tagsTable').DataTable({
-        // ajax: '/MinimalChangesData.txt',
-        ajax: '/MinimalChangesData_TagsPosts.json',
-          
-        dataSrc: '',
-        columns: [
-          { data: 2 }, // TagName
-          { data: 3 }, // TagCount
- 
-          {
-            data: 5, // ExcerptBody
-            render: data => data?.trim() ? 'Yes' : 'No'
-          },
-          {
-            data: 5, // ExcerptBody
-            render: function (data) {
-              if (data?.trim()) {
-                const escaped = $('<div>').text(data).html(); // plain text escape
-                const short = escaped.length > 100 ? escaped.substring(0, 100) + '…' : escaped;
-                return `<span class="tooltip-text" title="${escaped}">${short}</span>`;
-              }
-              return '<i>(no excerpt)</i>';
-            }
-          },
-
-          {
-            data: 7, // WikiBody
-            render: data => data?.trim() ? 'Yes' : 'No'
-          },
-          {
-            data: 7, // WikiBody (raw HTML rendered safely)
-            render: function (data) {
-              if (data?.trim()) {
-                const cleanHTML = DOMPurify.sanitize(data); // remove any <script>, etc.
-                const tempDiv = document.createElement('div');
-                tempDiv.innerHTML = cleanHTML;
-                const plainText = tempDiv.textContent || tempDiv.innerText || '';
-                const short = cleanHTML.length > 100 ? cleanHTML.substring(0, 100) + '…' : cleanHTML;
-
-                return `<span class="tooltip-text" title="${plainText}">${short}</span>`;
-              }
-              return '<i>(no wiki)</i>';
-            }
-          }
-        ]
-      });
-
-      // Handle filter clicks
-      $('#alphabetSearch').on('click', 'span', function () {
-        $('#alphabetSearch span').removeClass('active');
-        $(this).addClass('active');
-
-        const letter = $(this).data('letter');
-        if (letter === 'All') {
-          table.column(0).search('').draw();
-        } else {
-          const escaped = letter.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-          table.column(0).search('^' + escaped, true, false).draw();
-        }
-      });
-    });
-  </script> -->
 
 
     <script>
-// 	var _alphabetSearch = '';
-    
-// 	    $.fn.dataTable.ext.search.push( function ( settings, searchData ) {
-// 		    console.log("inside search");
-//     if ( ! _alphabetSearch ) {
-//         return true;
-//     }
- 
-//     if ( searchData[0].charAt(0) === _alphabetSearch ) {
-//         return true;
-//     }
- 
-//     return false;
-// } );
- 
+
     $(document).ready(function() {
       var table = $('#tagsTable').DataTable({
         ajax: 'MinimalChangesData_TagsPosts.json',
         columns: [
 	          { data: 2 },  // TagName
 	          { data: 3 },  // TagCount
-	          { data: 7,
-	            	render: function (data) {
-	              	return data.trim() ? '✔️' : '❌';
-	            	}
-	          }, 
+	          // { data: 7,
+	          //   	render: function (data) {
+	          //     	return data.trim() ? '✔️' : '❌';
+	          //   	}
+	          // }, 
 		{
 			            // data: 7,  // ExcerptPostBody
 			            // render: function (data, type) {
@@ -337,12 +252,12 @@ function arrangeColumns() {
 			      return `<span title="${data.replace(/"/g, '&quot;')}">${short}${data.length > 100 ? '…' : ''}</span>`;
 			    }
 	          },
-		{
-	        data: 6,
-		            render: function (data) {
-		              return data.trim() ? '✔️' : '❌';
-		            }
-		}, 
+		// {
+	 //        data: 6,
+		//             render: function (data) {
+		//               return data.trim() ? '✔️' : '❌';
+		//             }
+		// }, 
 		{
 		            // data: 6,  // WikiPostBody (HTML)
 		            // className: 'body-html',
@@ -371,10 +286,11 @@ function arrangeColumns() {
 			              </a>`;
 			    }
 		  }
-        ],
-        initComplete: function () {
-          buildAlphabetNav(this.api());
-        }
+        ]
+	      // ,
+       //  initComplete: function () {
+       //    buildAlphabetNav(this.api());
+       //  }
       });
 function buildAlphabetNav(api) {
 	const alphabet = {};
