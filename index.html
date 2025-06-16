@@ -268,7 +268,10 @@ function arrangeColumns() {
 
 
     <script>
-var _alphabetSearch = '';
+
+ 
+    $(document).ready(function() {
+	    var _alphabetSearch = '';
  
 $.fn.dataTable.ext.search.push( function ( settings, searchData ) {
     if ( ! _alphabetSearch ) {
@@ -299,8 +302,7 @@ function bin ( data ) {
  
     return bins;
 }
- 
-    $(document).ready(function() {
+	    
       var table = $('#tagsTable').DataTable({
         ajax: 'MinimalChangesData_TagsPosts.json',
         columns: [
