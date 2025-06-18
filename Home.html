@@ -79,8 +79,13 @@
   let currentFilter = '';
 
   function loadTags() {
-    $.getJSON('tags.json', function (data) {
-      allTags = data.map(item => ({ name: item[0], description: item[1], count: item[2] }));
+    // $.getJSON('tags.json', function (data) {
+    $.getJSON('MinimalChangesData_TagsPosts.json', function (data) {
+
+      // "41817", "118274", "gluon-desktop", "55", "35794393", 
+      allTags = data.map(item => ({ name: item[2], description: item[3], count: item[4]    }));
+      
+      // allTags = data.map(item => ({ name: item[0], description: item[1], count: item[2]    }));
       generateAlphabetNav();
       applyFilters();
     });
