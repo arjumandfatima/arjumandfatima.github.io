@@ -81,15 +81,19 @@
   function loadTags() {
     // $.getJSON('tags.json', function (response) {
     $.getJSON('MinimalChangesData_TagsPosts.json', function (response) {
-
+allTags = response.data.map(item => ({
+  name: item[2],
+  description: (item.length > 7 ? item[7] : (item.length > 6 ? item[6] : '')),
+  count: parseInt(item[3]) || 0
+}));
       
-      allTags = response.data.map(item => ({
-        name: item[2],
-        // description: item[7] || item[6] || '',
-        description: (item.length > 7 ? item[7] : (item.length > 6 ? item[6] : '')),
+      // allTags = response.data.map(item => ({
+      //   name: item[2],
+      //   // description: item[7] || item[6] || '',
+      //   description: (item.length > 7 ? item[7] : (item.length > 6 ? item[6] : '')),
 
-        count: parseInt(item[3]) || 0
-      }));
+      //   count: parseInt(item[3]) || 0
+      // }));
       generateAlphabetNav();
       applyFilters();
     });
