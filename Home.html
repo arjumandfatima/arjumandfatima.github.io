@@ -17,7 +17,7 @@
       font-size: 0.85rem;
       color: #555;
     }
-  </style> 
+  </style>
 </head>
 <body>
 
@@ -79,20 +79,22 @@
   let currentFilter = '';
 
   function loadTags() {
-    // $.getJSON('tags.json', function (data) {
-    $.getJSON('Data.json', function (data) {
+    // $.getJSON('tags.json', function (response) {
+    $.getJSON('MinimalChangesData_TagsPosts.json', function (response) {
 
-      // "41817", "118274", "gluon-desktop", "55", "35794393", 
-      allTags = data.map(item => ({ name: item[2], description: item[3], count: item[4]    }));
       
-      // allTags = data.map(item => ({ name: item[0], description: item[1], count: item[2]    }));
+      allTags = response.data.map(item => ({
+        name: item[2],
+        description: item[7] || item[6] || '',
+        count: parseInt(item[3]) || 0
+      }));
       generateAlphabetNav();
       applyFilters();
     });
   }
 
   function generateAlphabetNav() {
-    const chars = [...new Set(allTags.map(tag => tag.name[0].toUpperCase()))].sort();
+    const chars = [...new Set(allTags.map(tag => tag.name.charAt(0).toUpperCase()))].sort();
     const nav = $('.alphabet-nav');
     nav.empty();
     chars.forEach(char => {
