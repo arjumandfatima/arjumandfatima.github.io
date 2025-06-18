@@ -85,7 +85,9 @@
       
       allTags = response.data.map(item => ({
         name: item[2],
-        description: item[7] || item[6] || '',
+        // description: item[7] || item[6] || '',
+        description: (item.length > 7 ? item[7] : (item.length > 6 ? item[6] : '')),
+
         count: parseInt(item[3]) || 0
       }));
       generateAlphabetNav();
