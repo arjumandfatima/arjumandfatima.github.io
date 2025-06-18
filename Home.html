@@ -81,11 +81,11 @@
   function loadTags() {
     // $.getJSON('tags.json', function (response) {
     $.getJSON('MinimalChangesData_TagsPosts.json', function (response) {
-allTags = response.data.map(item => ({
-  name: item[2],
-  description: (item.length > 7 ? item[7] : (item.length > 6 ? item[6] : '')),
-  count: parseInt(item[3]) || 0
-}));
+// allTags = response.data.map(item => ({
+//   name: item[2],
+//   description: (item.length > 7 ? item[7] : (item.length > 6 ? item[6] : '')),
+//   count: parseInt(item[3]) || 0
+// }));
       
       // allTags = response.data.map(item => ({
       //   name: item[2],
@@ -94,24 +94,51 @@ allTags = response.data.map(item => ({
 
       //   count: parseInt(item[3]) || 0
       // }));
+
+      allTags = response.data.map(item => {
+  const name = item[2] || '';
+  const description = (item.length > 7 ? item[7] : (item.length > 6 ? item[6] : ''));
+  return {
+    name,
+    description,
+    count: parseInt(item[3]) || 0
+  };
+}).filter(tag => tag.name); // filter out undefined or empty tag names
       generateAlphabetNav();
       applyFilters();
     });
   }
+function generateAlphabetNav() {
+  const chars = [...new Set(
+    allTags
+      .map(tag => (tag.name && typeof tag.name === 'string') ? tag.name.charAt(0).toUpperCase() : '#')
+  )].sort();
 
-  function generateAlphabetNav() {
-    const chars = [...new Set(allTags.map(tag => tag.name.charAt(0).toUpperCase()))].sort();
-    const nav = $('.alphabet-nav');
-    nav.empty();
-    chars.forEach(char => {
-      nav.append(`<button class="btn btn-outline-primary btn-sm" data-char="${char}">${char}</button>`);
-    });
-    nav.on('click', 'button', function () {
-      currentFilter = $(this).data('char');
-      currentPage = 1;
-      applyFilters();
-    });
-  }
+  const nav = $('.alphabet-nav');
+  nav.empty();
+  chars.forEach(char => {
+    nav.append(`<button class="btn btn-outline-primary btn-sm" data-char="${char}">${char}</button>`);
+  });
+
+  nav.off('click').on('click', 'button', function () {
+    currentFilter = $(this).data('char');
+    currentPage = 1;
+    applyFilters();
+  });
+}
+  // function generateAlphabetNav() {
+  //   const chars = [...new Set(allTags.map(tag => tag.name.charAt(0).toUpperCase()))].sort();
+  //   const nav = $('.alphabet-nav');
+  //   nav.empty();
+  //   chars.forEach(char => {
+  //     nav.append(`<button class="btn btn-outline-primary btn-sm" data-char="${char}">${char}</button>`);
+  //   });
+  //   nav.on('click', 'button', function () {
+  //     currentFilter = $(this).data('char');
+  //     currentPage = 1;
+  //     applyFilters();
+  //   });
+  // }
 
   function applyFilters() {
     const search = $('#searchInput').val().toLowerCase();
