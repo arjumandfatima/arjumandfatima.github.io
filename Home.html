@@ -80,7 +80,7 @@
 
   function loadTags() {
     // $.getJSON('tags.json', function (data) {
-    $.getJSON('MinimalChangesData_TagsPosts.json', function (data) {
+    $.getJSON('Data.json', function (data) {
 
       // "41817", "118274", "gluon-desktop", "55", "35794393", 
       allTags = data.map(item => ({ name: item[2], description: item[3], count: item[4]    }));
