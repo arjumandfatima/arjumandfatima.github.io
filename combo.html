@@ -35,10 +35,14 @@
     }
     .tree-item {
       cursor: pointer;
-      margin-bottom: 0.5rem;
+      margin-bottom: 0.25rem;
     }
-    .tree-item:hover {
-      text-decoration: underline;
+    .tree-children {
+      padding-left: 1rem;
+      display: none;
+    }
+    .tree-toggle {
+      font-weight: bold;
     }
   </style>
 </head>
@@ -49,9 +53,17 @@
     <div class="col-md-3 sidebar">
       <h5>Tree View</h5>
       <div id="treeView">
-        <div class="tree-item" data-node="home">Home</div>
-        <div class="tree-item" data-node="languages">Programming Languages</div>
-        <div class="tree-item" data-node="markup">Markup Languages</div>
+        <div class="tree-item tree-toggle" data-toggle="home">Home</div>
+        <div class="tree-item tree-toggle" data-toggle="languages">Programming Languages</div>
+        <div class="tree-children" data-parent="languages">
+          <div class="tree-item" data-node="javascript">JavaScript</div>
+          <div class="tree-item" data-node="python">Python</div>
+        </div>
+        <div class="tree-item tree-toggle" data-toggle="markup">Markup Languages</div>
+        <div class="tree-children" data-parent="markup">
+          <div class="tree-item" data-node="html">HTML</div>
+          <div class="tree-item" data-node="xml">XML</div>
+        </div>
       </div>
     </div>
 
@@ -84,19 +96,12 @@
 <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 <script>
-  const contentMap = {
-    home: [
-      { name: "Welcome", description: "Overview of the dashboard", count: 0, details: ["You can explore the sidebar to dive into sections."] }
-    ],
-    languages: [
-      { name: "JavaScript", description: "Client-side scripting language", count: 2300000, details: ["Used in React, Vue, Node.js"] },
-      { name: "Python", description: "Powerful and easy to learn", count: 1800000, details: ["Great for ML and scripting"] }
-    ],
-    markup: [
-      { name: "HTML", description: "Markup language for web pages", count: 1200000, details: ["Defines structure", "Works with CSS/JS"] },
-      { name: "XML", description: "Extensible Markup Language", count: 400000, details: ["Used for data transport"] }
-    ]
-  };
+  let contentMap = {};
+
+  $.getJSON('content.json', function (data) {
+    contentMap = data;
+    renderCards('home');
+  });
 
   function renderCards(section) {
     const tags = contentMap[section] || [];
@@ -149,14 +154,16 @@
     $('#breadcrumbNav').html(`<li class="breadcrumb-item active">${label}</li>`);
   }
 
-  $(document).ready(function () {
-    renderCards('home');
+  $(document).on('click', '.tree-item[data-node]', function () {
+    const section = $(this).data('node');
+    updateBreadcrumb($(this).text());
+    renderCards(section);
+  });
 
-    $('.tree-item').on('click', function () {
-      const section = $(this).data('node');
-      updateBreadcrumb($(this).text());
-      renderCards(section);
-    });
+  $(document).on('click', '.tree-toggle', function () {
+    const target = $(this).data('toggle');
+    const children = $(`.tree-children[data-parent='${target}']`);
+    children.slideToggle();
   });
 </script>
 </body>
