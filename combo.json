@@ -1,42 +1,20 @@
 {
-  "home": [
+  "react": [
     {
-      "name": "Welcome",
-      "description": "Overview of the dashboard",
-      "count": 0,
-      "details": ["Explore the sidebar to view sections."]
-    }
-  ],
-  "javascript": [
-    {
-      "name": "JavaScript",
-      "description": "Client-side scripting language",
-      "count": 2300000,
-      "details": ["Used in React, Vue, Node.js"]
-    }
-  ],
-  "python": [
-    {
-      "name": "Python",
-      "description": "Powerful and easy to learn",
-      "count": 1800000,
-      "details": ["Great for ML and scripting"]
-    }
-  ],
-  "html": [
-    {
-      "name": "HTML",
-      "description": "Markup language for web pages",
-      "count": 1200000,
-      "details": ["Defines structure", "Works with CSS/JS"]
-    }
-  ],
-  "xml": [
-    {
-      "name": "XML",
-      "description": "Extensible Markup Language",
-      "count": 400000,
-      "details": ["Used for data transport"]
+      "name": "React",
+      "description": "JavaScript library for building UIs.",
+      "count": 1240000,
+      "details": [
+        "Component-based",
+        {
+          "title": "Core Concepts",
+          "items": ["JSX", "Virtual DOM", "Hooks"]
+        },
+        {
+          "title": "Ecosystem",
+          "items": ["React Router", "Redux"]
+        }
+      ]
     }
   ]
 }
