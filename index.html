@@ -236,7 +236,7 @@ div.alphabetInfo {
     <thead>
       <tr>
         <th>Tag Name</th>
-        <th>Tag Count</th> 
+        <th>Tag Count</th>   -->
 <!-- 	      <th>Excerpt Exists</th> -->
 <!--         <th>Tag Excerpt</th> -->
 <!--        <th>Wiki Post Exists</th> -->
@@ -246,7 +246,7 @@ div.alphabetInfo {
 <!--       </tr> -->
 <!--     </thead> -->
 <!--   </table> -->
-       -->
+     
 
 
   <!-- Dependencies -->
@@ -592,7 +592,9 @@ function applyFilters() {
    
   
     $(async function () {
-      const raw = await $.getJSON('MinimalChangesData.json');
+      const raw = await $.getJSON('MinimalChangesData_TagsPosts.json');
+	    
+      // const raw = await $.getJSON('MinimalChangesData.json');
       // const raw = await $.getJSON('tags.json');
 
       console.log('raw');
