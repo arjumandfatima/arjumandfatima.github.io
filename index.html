@@ -353,9 +353,9 @@ let filterDueToSearchButtons = false;
     
 
 function renderTags() {
-      console.log('renderTags');
-        console.log(filteredTags.length);
-        console.log(filteredTags);
+      // console.log('renderTags');
+      //   console.log(filteredTags.length);
+      //   console.log(filteredTags);
 
   const start = (currentPage - 1) * recordsPerPage;
   const end = start + recordsPerPage;
@@ -390,7 +390,7 @@ function renderTags() {
 }
 
     function renderPagination() {
-      console.log('renderPagination');
+      // console.log('renderPagination');
 
       const totalPages = Math.ceil(filteredTags.length / recordsPerPage);
       let html = '';
@@ -427,7 +427,7 @@ function renderTags() {
     }
 
 function renderNavBar() {
-      console.log('renderNavBar');
+      // console.log('renderNavBar');
 
   const chars = [...new Set(
     allTags.map(t => {
@@ -454,7 +454,7 @@ function isCharNumber(c) {
 
 
 function applyFilters() {
-    console.log('applyFilters');
+    // console.log('applyFilters');
 
     // const search = $('#search').val().toLowerCase();
     const searchName= $('#searchName').val().toLowerCase();
@@ -503,8 +503,8 @@ function applyFilters() {
 
       if (searchName!='')
       {
-        console.log('inside search name');
-        console.log(filteredTags.length);
+        // console.log('inside search name');
+        // console.log(filteredTags.length);
 
         filteredTags = allTags.filter(tag => {
           const name = tag.name || '';
@@ -522,13 +522,13 @@ function applyFilters() {
 
           return  matchesSearch;
         });
-        console.log(filteredTags.length);
-        console.log(filteredTags);
+        // console.log(filteredTags.length);
+        // console.log(filteredTags);
 
       }
       else if (searchDesc!='')
       {
-        console.log('inside search desc');
+        // console.log('inside search desc');
             filteredTags = allTags.filter(tag => {
             const name = tag.name || '';
             const desc = tag.desc || '';
@@ -583,10 +583,10 @@ function applyFilters() {
         filteredTags.sort((a, b) => (b.count ?? 0) - (a.count ?? 0));
       }
     }
-    console.log(" filteredTags after all filtering");
+    // console.log(" filteredTags after all filtering");
 
-    console.log(filteredTags.length);
-    console.log(filteredTags);
+    // console.log(filteredTags.length);
+    // console.log(filteredTags);
     currentPage = 1;
     renderTags();
     renderPagination();
@@ -599,7 +599,7 @@ function applyFilters() {
       // const raw = await $.getJSON('MinimalChangesData.json');
       // const raw = await $.getJSON('tags.json');
 
-      console.log('raw');
+      // console.log('raw');
 
       allTags = raw.map(getTagObject);
       filteredTags = allTags;
@@ -609,7 +609,7 @@ function applyFilters() {
     });
 
     $('#searchName, #searchDesc, #sort').on('input change', function () {
-      console.log('on input change search sort');
+      // console.log('on input change search sort');
 
       currentSort = $('#sort').val();
       filterDueToSearchButtons = true;
@@ -617,7 +617,7 @@ function applyFilters() {
     });
 
     $('#pageSize').on('change', function () {
-      console.log('on  change pageSize');
+      // console.log('on  change pageSize');
 
       recordsPerPage = parseInt($(this).val());
       currentPage = 1;
@@ -626,7 +626,7 @@ function applyFilters() {
     });
 
     $('#jumpBtn').on('click', function () {
-      console.log('on click jumpBtn');
+      // console.log('on click jumpBtn');
 
       const jumpTo = parseInt($('#jumpPage').val());
       const totalPages = Math.ceil(filteredTags.length / recordsPerPage);
@@ -638,7 +638,7 @@ function applyFilters() {
     });
 
     $('#pagination').on('click', 'button', function () {
-      console.log('on click pagination button');
+      // console.log('on click pagination button');
 
       const page = $(this).data('page');
       if (page) {
@@ -652,7 +652,7 @@ function applyFilters() {
  
 
     $('#navbar').on('click', 'button', function () {
-      console.log('on click navbar button');
+      // console.log('on click navbar button');
     $('#navbar button').removeClass('active');
     $(this).addClass('active');
     currentPage = 1;
@@ -660,8 +660,8 @@ function applyFilters() {
 
 
       currentChar = $(this).data('char');
-      console.log(currentChar);
-      console.log(currentChar+2);
+      // console.log(currentChar);
+      // console.log(currentChar+2);
 
 filterDueToNavBar = true;
 
@@ -673,7 +673,7 @@ filterDueToNavBar = true;
 
     // Keyboard navigation
     document.addEventListener('keydown', function (e) {
-      console.log('event addEventListener keydown');
+      // console.log('event addEventListener keydown');
 
       const totalPages = Math.ceil(filteredTags.length / recordsPerPage);
       if (e.key === 'ArrowRight' && currentPage < totalPages) {
