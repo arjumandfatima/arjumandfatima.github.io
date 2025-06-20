@@ -1,12 +1,118 @@
 <!DOCTYPE html>
 <html>
 <head>
+	  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-LN+7fdVzj6u52u30Kp6M/trliBMCMKTyK833zpbD+pXdCLuTusPj697FH4R/5mcr" crossorigin="anonymous">
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js" integrity="sha384-ndDqU0Gzau9qJ1lfW4pNLlhNTkCfHzAVBReH9diLvGRem5+R9g2FzA8ZGN954O5Q" crossorigin="anonymous"></script>
+
 <style>
-body {
+	    body {
+      /*font-family: Arial, sans-serif;*/
+      padding: 20px;
+    }
+
+    #controls {
+      margin-bottom: 15px;
+    }
+
+    #controls input, #controls select {
+      margin-right: 10px;
+    }
+
+    #navbar button {
+      margin: 0 2px;
+      padding: 5px;
+      cursor: pointer;
+      border:black;
+    }
+
+    #tags {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+      gap: 10px;
+    }
+
+    .tag-card {
+      border: 1px solid #ccc;
+      padding: 10px;
+      border-radius: 6px;
+      background: #f9f9f9;
+    }
+
+    .tag-card h4 {
+      margin: 0 0 5px;
+    }
+
+    #pagination {
+      margin-top: 15px;
+      text-align: center;
+    }
+
+    #pagination button {
+      margin: 0 2px;
+      padding: 6px 10px;
+      cursor: pointer;
+      border-radius: 4px;
+      border: 1px solid #ccc;
+      background: #f9f9f9;
+    }
+
+    #pagination button.active {
+      background-color: #007bff;
+      color: white;
+      font-weight: bold;
+    }
+
+    #pagination button.disabled {
+      color: #aaa;
+      background-color: #eee;
+      cursor: not-allowed;
+    }
+
+    #pagination .ellipsis {
+      color: #888;
+      margin: 0 5px;
+      font-weight: bold;
+      pointer-events: none;
+      user-select: none;
+    }
+
+    .tag-card {
+  border: 1px solid #ccc;
+  padding: 10px;
+  border-radius: 6px;
+  background: #f9f9f9;
+  height: 180px; /* Fixed height for uniformity */
+  box-sizing: border-box;
+  overflow: hidden;
+}
+
+.tag-card h4 {
+  margin: 0 0 5px;
+  font-size: 12px;
+  line-height: 1.2;
+}
+
+.tag-card p {
+  font-size: 12px;
+  margin: 5px 0 10px;
+  line-height: 1.3;
+  height: 3.5em; /* limit text space */
+  overflow: hidden;
+}
+mark {
+  background-color: lightgrey;
+  color: black;
+}
+.min-vh-10 {
+    min-height: 10vh !important;
+}
+/* body {
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
-}  
+}   */
       
-#chartdiv {
+/* #chartdiv {
   width: 100%;
   height: 500px;
 }  
@@ -54,7 +160,7 @@ div.alphabetInfo {
     padding-top: 0.4em;
     text-align: center;
     z-index: 1;
-}
+} */
 </style>  
 
 
@@ -150,6 +256,433 @@ div.alphabetInfo {
       
 <!-- <div id="chartdiv"></div> -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/js/bootstrap.bundle.min.js" integrity="sha384-j1CDi7MgGQ12Z7Qab0qlWQ/Qqz24Gc6BM0thvEMVjHnfYGF0rmFCozFSxQBxwHKO" crossorigin="anonymous"></script>
+
+
+
+
+	     <div  class ="row">
+        <div class="col-md-2">
+          <div class="form-control" style="border:none;">
+              <label for="searchName">Search </label>
+              <input  class="form-control" id="searchName" placeholder="Tag Name">
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="form-control" style="border:none;">
+              <label for="searchDesc">Search </label>
+              <input  class="form-control" id="searchDesc" placeholder="Tag Description">
+          </div>
+        </div>
+        <div class="col-md-2">
+          <div class="form-control" style="border:none;">
+
+              <label for="sort">Sort:</label>
+              <select class="form-select" id="sort">
+                <option value="name">Name</option>
+                <option value="count">Popular</option>
+              </select>
+            </div>
+        </div>
+        <div class="col-md-2">
+            <div class="form-control" style="border:none;">
+
+              <label for="pageSize">Page Size:</label>
+              <select class="form-select" id="pageSize">
+                <option value="10">10</option>
+                <option value="25">25</option>
+                <option value="36" selected>36</option>
+                <option value="50">50</option>
+                <option value="100">100</option>
+              </select>
+            </div>
+        </div>
+        <div class="col-md-2">
+    <!-- <span> -->
+            <div class="form-control" style="border:none;">
+                <label for="pageSize">Jump to page:</label>
+                <div class="input-group mb-3">
+  <input type="text" id="jumpPage" min="1" class="form-control" placeholder="" aria-label="" aria-describedby="basic-addon2">
+  <div class="input-group-append">
+    <button class="btn btn-outline-dark" id="jumpBtn" type="button">Go</button>
+  </div>
+</div>
+
+
+
+                <!-- <div class="row">
+                  <div class="col-md-6">
+                    <input  class="form-control" type="number" id="jumpPage" min="1"  />
+                  </div>
+                  <div class="col-md-6">
+                    <button class="form-control btn btn-light btn-sm" id="jumpBtn">Go</button>
+                  </div>
+    
+
+                </div> -->
+            </div>
+         </div>
+    <!-- <input type="text" id="search" placeholder="Search tags..." /> -->
+
+  </div>
+
+  <div id="navbar"></div>
+  <div id="tags"></div>
+  <div id="pagination"></div>
+
+  <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+  <script>
+    let allTags = [];
+    let filteredTags = [];
+    let currentChar = '';
+    let currentPage = 1;
+    let recordsPerPage = 36;
+    let currentSort = 'name';
+
+let filterDueToNavBar = false;
+let filterDueToSearchButtons = false;
+
+    const getTagObject = (raw) => ({
+      name: raw[2],
+      desc: raw[6],
+      count: raw[3]
+
+    });
+
+    
+
+function renderTags() {
+      console.log('renderTags');
+        console.log(filteredTags.length);
+        console.log(filteredTags);
+
+  const start = (currentPage - 1) * recordsPerPage;
+  const end = start + recordsPerPage;
+  const tagsToShow = filteredTags.slice(start, end);
+
+  const html = tagsToShow.map(tag => {
+    const name = tag.name || '';
+    // const desc = tag.desc || '';
+    const maxLen = 150;
+    const desc = tag.desc || ' '.repeat(maxLen);
+
+    const shortDesc = desc.length > maxLen ? desc.substring(0, maxLen) + '...' : desc;
+    const tooltip = desc ? desc.replace(/"/g, '&quot;') : 'No description available';
+
+
+
+    return `<div class="card h-100"  title="${tooltip}">
+    <div class="card-header">
+    <mark>${name}</mark> 
+   <small>${tag.count ?? 0} Qs</small>
+  </div>
+  <div class="card-body d-flex flex-column min-vh-10">
+    <p class="card-text" style="font-size: 10px;">${shortDesc}</p>
+    <div class="card-footer text-body-secondary mt-auto " style="padding:0">
+    <a href="https://stackoverflow.com/questions/tagged/${name}" target="_blank" class="card-link btn btn-sm btn-secondary" >Explore</a>
+  </div>
+  </div>
+</div>`;
+  }).join('');
+
+  $('#tags').html(html);
+}
+
+    function renderPagination() {
+      console.log('renderPagination');
+
+      const totalPages = Math.ceil(filteredTags.length / recordsPerPage);
+      let html = '';
+
+      if (currentPage > 1) {
+        html += `<button data-page="${currentPage - 1}" title="Previous Page"><i class="fas fa-chevron-left"></i></button>`;
+      } else {
+        html += `<button class="disabled" disabled title="Previous Page"><i class="fas fa-chevron-left"></i></button>`;
+      }
+
+      if (totalPages <= 7) {
+        for (let i = 1; i <= totalPages; i++) {
+          html += `<button class="${i === currentPage ? 'active' : ''}" data-page="${i}">${i}</button>`;
+        }
+      } else {
+        html += `<button class="${1 === currentPage ? 'active' : ''}" data-page="1">1</button>`;
+        if (currentPage > 4) html += `<span class="ellipsis">...</span>`;
+        const start = Math.max(2, currentPage - 2);
+        const end = Math.min(totalPages - 1, currentPage + 2);
+        for (let i = start; i <= end; i++) {
+          html += `<button class="${i === currentPage ? 'active' : ''}" data-page="${i}">${i}</button>`;
+        }
+        if (currentPage < totalPages - 3) html += `<span class="ellipsis">...</span>`;
+        html += `<button class="${totalPages === currentPage ? 'active' : ''}" data-page="${totalPages}">${totalPages}</button>`;
+      }
+
+      if (currentPage < totalPages) {
+        html += `<button data-page="${currentPage + 1}" title="Next Page"><i class="fas fa-chevron-right"></i></button>`;
+      } else {
+        html += `<button class="disabled" disabled title="Next Page"><i class="fas fa-chevron-right"></i></button>`;
+      }
+
+      $('#pagination').html(html);
+    }
+
+function renderNavBar() {
+      console.log('renderNavBar');
+
+  const chars = [...new Set(
+    allTags.map(t => {
+      const name = t.name || '';
+      return name.length > 0 ? name[0].toUpperCase() : '#';
+    })
+  )].sort();
+
+  allBtn  = `<button class="active  btn btn-sm btn-light" data-char="_" style="margin-top:20px; margin-bottom:20px;">All</button>`;
+
+  const buttons = chars.map(c =>
+    `<button class="${c === currentChar ? 'active btn-info' : ''}btn btn-sm btn-light" style="margin-top:20px; margin-bottom:20px;"data-char="${c}">${c}</button>`
+  ).join('');
+
+allBtn = allBtn+buttons;
+  $('#navbar').html(`<strong>Jump to Tags Starting From:</strong><br/> ${allBtn} <br/>`);
+
+  // $('#navbar').html(`<strong>Jump to Tags Starting From:</strong> ${buttons}`);
+}
+
+function isCharNumber(c) {
+  return c >= '0' && c <= '9';
+}
+
+
+function applyFilters() {
+    console.log('applyFilters');
+
+    // const search = $('#search').val().toLowerCase();
+    const searchName= $('#searchName').val().toLowerCase();
+    const searchDesc = $('#searchDesc').val().toLowerCase();
+   
+    //if any other button from navbar is pressed
+    if (filterDueToNavBar){ 
+          if (currentChar =='_') //no need to do anything if all is pressed
+            {
+              // filteredTags = allTags;
+              location.reload();
+            }   
+          else (currentChar != '' && currentChar != '_' )
+            { 
+              filteredTags = allTags.filter(tag => {
+              const name = tag.name || '';
+              const desc = tag.desc || '';
+              const countStr = (tag.count ?? '').toString();
+              matchesChar =  name[0]?.toUpperCase() === currentChar; // Case 1: a-z ok 
+              if (isCharNumber(currentChar)  ||currentChar=='#')
+              {
+                  matchesChar =  name[0] == currentChar; //Case 2: 1-9 works ok
+                  if (currentChar=="0" ||currentChar=="#")
+                  { // Case 3: special case of 0 and empty name which was labelled as #
+                   if (currentChar=="#")
+                   { //if name is empty (null or nan)
+
+                      if(!name.length>0)
+                      { 
+                        matchesChar=true;
+                      }
+                    }
+                    else
+                    {
+                      
+                    }
+                  }
+              }
+            return matchesChar ;
+          });
+
+          } // end currentChar !='' something other than All clicked from navbar
+        }
+    else if (filterDueToSearchButtons)
+    {
+
+      if (searchName!='')
+      {
+        console.log('inside search name');
+        console.log(filteredTags.length);
+
+        filteredTags = allTags.filter(tag => {
+          const name = tag.name || '';
+          const desc = tag.desc || '';
+          const countStr = (tag.count ?? '').toString();
+
+          // const matchesChar = !currentChar || name[0]?.toUpperCase() === currentChar;
+
+          const matchesSearch =
+            name.toLowerCase().includes(searchName) //||
+            // desc.toLowerCase().includes(searchName) ||
+            // countStr.includes(searchName)
+            ;
+          // return matchesChar && matchesSearch;
+
+          return  matchesSearch;
+        });
+        console.log(filteredTags.length);
+        console.log(filteredTags);
+
+      }
+      else if (searchDesc!='')
+      {
+        console.log('inside search desc');
+            filteredTags = allTags.filter(tag => {
+            const name = tag.name || '';
+            const desc = tag.desc || '';
+            const countStr = (tag.count ?? '').toString();
+
+            // const matchesChar = !currentChar || desc[0]?.toUpperCase() === currentChar;
+
+            const matchesSearch =
+              // name.toLowerCase().includes(searchName) ||
+              desc.toLowerCase().includes(searchDesc) //||
+              //countStr.includes(searchName)
+              ;
+            // return matchesChar && matchesSearch;
+
+            return  matchesSearch;
+          });
+
+      }
+      else
+        {
+         //name or description not searched
+        filteredTags= allTags;
+        filterDueToSearchButtons = false;
+      }
+
+      // else{
+      //   filteredTags= allTags;
+      // }
+      // filteredTags = allTags.filter(tag => {
+      //   const name = tag.name || '';
+      //   const desc = tag.desc || '';
+      //   const countStr = (tag.count ?? '').toString();
+
+      //   const matchesChar = !currentChar || name[0]?.toUpperCase() === currentChar;
+
+      //   const matchesSearch =
+      //     name.toLowerCase().includes(searchName) ||
+      //     desc.toLowerCase().includes(searchName) ||
+      //     countStr.includes(searchName);
+
+      //   return matchesChar && matchesSearch;
+      // });
+
+      if (currentSort === 'name') {
+        filteredTags.sort((a, b) => {
+          const nameA = a.name || '';
+          const nameB = b.name || '';
+          return nameA.localeCompare(nameB);
+        });
+      } 
+      else {
+        filteredTags.sort((a, b) => (b.count ?? 0) - (a.count ?? 0));
+      }
+    }
+    console.log(" filteredTags after all filtering");
+
+    console.log(filteredTags.length);
+    console.log(filteredTags);
+    currentPage = 1;
+    renderTags();
+    renderPagination();
+}
+   
+  
+    $(async function () {
+      const raw = await $.getJSON('MinimalChangesData.json');
+      // const raw = await $.getJSON('tags.json');
+
+      console.log('raw');
+
+      allTags = raw.map(getTagObject);
+      filteredTags = allTags;
+
+      renderNavBar();
+      applyFilters();
+    });
+
+    $('#searchName, #searchDesc, #sort').on('input change', function () {
+      console.log('on input change search sort');
+
+      currentSort = $('#sort').val();
+      filterDueToSearchButtons = true;
+      applyFilters();
+    });
+
+    $('#pageSize').on('change', function () {
+      console.log('on  change pageSize');
+
+      recordsPerPage = parseInt($(this).val());
+      currentPage = 1;
+      renderTags();
+      renderPagination();
+    });
+
+    $('#jumpBtn').on('click', function () {
+      console.log('on click jumpBtn');
+
+      const jumpTo = parseInt($('#jumpPage').val());
+      const totalPages = Math.ceil(filteredTags.length / recordsPerPage);
+      if (!isNaN(jumpTo) && jumpTo >= 1 && jumpTo <= totalPages) {
+        currentPage = jumpTo;
+        renderTags();
+        renderPagination();
+      }
+    });
+
+    $('#pagination').on('click', 'button', function () {
+      console.log('on click pagination button');
+
+      const page = $(this).data('page');
+      if (page) {
+        currentPage = parseInt(page);
+        renderTags();
+        renderPagination();
+      }
+    });
+
+
+ 
+
+    $('#navbar').on('click', 'button', function () {
+      console.log('on click navbar button');
+    $('#navbar button').removeClass('active');
+    $(this).addClass('active');
+    currentPage = 1;
+
+
+
+      currentChar = $(this).data('char');
+      console.log(currentChar);
+      console.log(currentChar+2);
+
+filterDueToNavBar = true;
+
+      applyFilters();
+
+
+      // renderNavBar();
+    });
+
+    // Keyboard navigation
+    document.addEventListener('keydown', function (e) {
+      console.log('event addEventListener keydown');
+
+      const totalPages = Math.ceil(filteredTags.length / recordsPerPage);
+      if (e.key === 'ArrowRight' && currentPage < totalPages) {
+        currentPage++;
+        renderTags();
+        renderPagination();
+      } else if (e.key === 'ArrowLeft' && currentPage > 1) {
+        currentPage--;
+        renderTags();
+        renderPagination();
+      }
+    });
+  </script>
 
     </body>
 <!-- <script>
