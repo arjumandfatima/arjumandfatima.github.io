@@ -271,7 +271,8 @@ function renderTreeNode(node, path = [], query = '') {
   div.setAttribute('data-name', node.TagName.toLowerCase());
   // div.setAttribute('title', node.WikiBody || '');
 
-    div.setAttribute('title', stripHTML(node.WikiBody || ''));
+    // div.setAttribute('title', stripHTML(node.WikiBody || ''));
+    div.setAttribute('title', escapeHTML(node.ExcerptBody || ''));
 
 
 // const excerptHTML = node.ExcerptBody ? `
@@ -281,13 +282,18 @@ function renderTreeNode(node, path = [], query = '') {
 //       </div>
 //     </p>` : '';
 
-const excerptHTML = node.ExcerptBody ? `
+const excerptHTML = node.WikiBody ? `
    
-      <div  title="${escapeHTML(node.ExcerptBody)}">
-        ${escapeHTML(node.ExcerptBody)}
+      <div  title="${stripHTML(escapeHTML(node.WikiBody))}">
+        ${stripHTML(escapeHTML(node.WikiBody))}
       </div>
     </p>` : '';
-
+// const excerptHTML = node.ExcerptBody ? `
+   
+//       <div  title="${escapeHTML(node.ExcerptBody)}">
+//         ${escapeHTML(node.ExcerptBody)}
+//       </div>
+//     </p>` : '';
 
 
   // const excerptHTML = node.ExcerptBody ? `
