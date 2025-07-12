@@ -349,11 +349,16 @@ let filterDueToNavBar = false;
 let filterDueToSearchButtons = false;
 
     const getTagObject = (raw) => ({
-      name: raw[2],
-      desc: raw[7],
+      // name: raw[2],
+      // desc: raw[7],
+	    
+      // // desc: raw[6],
+      // count: raw[3]
+ name: raw["TagName"],
+      desc: raw["ExcerptBody"],
 	    
       // desc: raw[6],
-      count: raw[3]
+      count: raw["TagCount"]
 
     });
 
