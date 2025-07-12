@@ -362,10 +362,15 @@ let filterDueToSearchButtons = false;
 
     });
  function countImmediateChildren(node) {
+	 console.log('inside countImmediateChildren');
+	 console.log(node);
+		     
             return node.NestedChildren ? node.NestedChildren.length : 0;
         }
 
         function countGrandChildren(node) {
+		 console.log('inside countGrandChildren');
+	 console.log(node);
             if (!node.NestedChildren) return 0;
             let count = 0;
             node.NestedChildren.forEach(child => {
