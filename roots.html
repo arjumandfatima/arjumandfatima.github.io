@@ -1,1 +1,1011 @@
+<!DOCTYPE html>
+<html>
+<head>
+	  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-LN+7fdVzj6u52u30Kp6M/trliBMCMKTyK833zpbD+pXdCLuTusPj697FH4R/5mcr" crossorigin="anonymous">
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js" integrity="sha384-ndDqU0Gzau9qJ1lfW4pNLlhNTkCfHzAVBReH9diLvGRem5+R9g2FzA8ZGN954O5Q" crossorigin="anonymous"></script>
+ 
+<style>
+	    body {
+      /*font-family: Arial, sans-serif;*/  
+      padding: 20px;
+    }
+    
+    #controls {
+      margin-bottom: 15px;
+    }
+  
+    #controls input, #controls select {
+      margin-right: 10px;
+    }
+ 
+    #navbar button {
+      margin: 0 2px;
+      padding: 5px;
+      cursor: pointer;
+      border:black;
+    }
+
+    #tags {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+      gap: 10px;
+    }
+
+    .tag-card {
+      border: 1px solid #ccc;
+      padding: 10px;
+      border-radius: 6px;
+      background: #f9f9f9;
+    }
+
+    .tag-card h4 {
+      margin: 0 0 5px;
+    }
+
+    #pagination {
+      margin-top: 15px;
+      text-align: center;
+    }
+
+    #pagination button {
+      margin: 0 2px;
+      padding: 6px 10px;
+      cursor: pointer;
+      border-radius: 4px;
+      border: 1px solid #ccc;
+      background: #f9f9f9;
+    }
+
+    #pagination button.active {
+      background-color: #007bff;
+      color: white;
+      font-weight: bold;
+    }
+
+    #pagination button.disabled {
+      color: #aaa;
+      background-color: #eee;
+      cursor: not-allowed;
+    }
+
+    #pagination .ellipsis {
+      color: #888;
+      margin: 0 5px;
+      font-weight: bold;
+      pointer-events: none;
+      user-select: none;
+    }
+
+    .tag-card {
+  border: 1px solid #ccc;
+  padding: 10px;
+  border-radius: 6px;
+  background: #f9f9f9;
+  height: 180px; /* Fixed height for uniformity */
+  box-sizing: border-box;
+  overflow: hidden;
+}
+
+.tag-card h4 {
+  margin: 0 0 5px;
+  font-size: 12px;
+  line-height: 1.2;
+}
+
+.tag-card p {
+  font-size: 12px;
+  margin: 5px 0 10px;
+  line-height: 1.3;
+  height: 3.5em; /* limit text space */
+  overflow: hidden;
+}
+mark {
+  background-color: lightgrey;
+  color: black;
+}
+.min-vh-10 {
+    min-height: 10vh !important;
+}
+/* body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+}   */
+      
+/* #chartdiv {
+  width: 100%;
+  height: 500px;
+}  
+
+	#alphabet-nav {
+  flex-wrap: wrap;
+  gap: 4px;
+}
+
+	div.alphabet {
+    position: relative;
+    display: table;
+    width: 100%;
+    margin-bottom: 1em;
+}
+ 
+div.alphabet span {
+    display: table-cell;
+    color: #3174c7;
+    cursor: pointer;
+    text-align: center;
+    width: 3.5%
+}
+ 
+div.alphabet span:hover {
+    text-decoration: underline;
+}
+ 
+div.alphabet span.active {
+    color: black;
+}
+ 
+div.alphabet span.empty {
+    color: red;
+}
+ 
+div.alphabetInfo {
+    display: block;
+    position: absolute;
+    background-color: #111;
+    border-radius: 3px;
+    color: white;
+    top: 2em;
+    height: 1.8em;
+    padding-top: 0.4em;
+    text-align: center;
+    z-index: 1;
+} */
+</style>  
+
+
+<script src="https://cdn.amcharts.com/lib/4/core.js"></script>
+<script src="https://cdn.amcharts.com/lib/4/charts.js"></script>
+<script src="https://cdn.amcharts.com/lib/4/themes/animated.js"></script>
+
+<link href="https://cdn.datatables.net/2.3.2/css/dataTables.dataTables.css" rel="stylesheet">
+	
+  <script src="https://code.jquery.com/jquery-3.7.1.js"></script>
+   <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/2.3.2/js/dataTables.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/dompurify@3.0.5/dist/purify.min.js"></script>
+  
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-4Q6Gf2aSP4eDXB8Miphtr37CMZZQ5oXLH2yaXMJ2w8e2ZtHTl7GptT4jmndRuHDT" crossorigin="anonymous">
+        <title>SO-TagNavigator</title>
+  
+    </head> 
+    <body>
+     <nav class="navbar navbar-expand-lg fixed-top bg-body-tertiary bg-dark  " data-bs-theme="dark">
+  <div class="container-fluid">
+    <a class="navbar-brand" href="#" style="color:yellow;">Stack Overflow Tag Navigator</a><small style="color:yellow;"><i>Making Less Popular Tags Discoverable</i></small>
+    <div class="col align-content-right">
+	    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    </div>
+	<div class="text-end">
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+        <li class="nav-item">
+          <a class="nav-link active" aria-current="page" href="https://stackoverflow.com/tags" target="_blank" data-bs-placement="bottom" title="Leads to Stack Overflow site">Existing Interface</a>
+        </li>
+	      <li class="nav-item">
+          <a class="nav-link active" aria-current="page" href="/roots.html" target="_blank" data-bs-placement="bottom" title="Displays the Root Tags in Each Tag Hierarchy Only">Root Tags Only</a>
+        </li>
+<!--         <li class="nav-item">
+          <a class="nav-link active" aria-current="page" href="#">Minimal Changes</a>
+        </li> -->
+<!--         <li class="nav-item">
+          <a class="nav-link" href="#">Link</a>
+        </li> -->  
+<!--         <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            Leveraging Morphological Similarity
+          </a>
+          <ul class="dropdown-menu">
+            <li><a class="dropdown-item" href="#">Algorithm 1</a></li>
+            <li><a class="dropdown-item" href="#">Algorithm 2</a></li>
+            <li><hr class="dropdown-divider"></li>
+            <li><a class="dropdown-item" href="#">Algorithm 3</a></li>
+          </ul>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link disabled" aria-disabled="true">Disabled</a>
+        </li> -->
+      </ul>
+<!--       <form class="d-flex" role="search">
+        <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search"/>
+        <button class="btn btn-outline-success" type="submit">Search</button>
+      </form> -->
+    </div>
+	</div>
+  </div>
+</nav>
+        <h3 style="padding-top:90px">
+          Minimal Changes in Stack Overflow Tags Interface
+        </h3><p >Without leveraging <b> implicit morphological, categorical or chronological information </b> assiociated with Stack Overflow Tags, we only designed an alternate interface to list down tags based on the following (bare minimum) improvements</p>
+      <ul>
+        <li>Allowing user to adjust the number of records to be displayed e.g. 10, 25, 50, 100</li>
+        <li>Jump to any alphabet to see all tags starting from that alphabet</li>
+        <li>Search a tag based on  Tag Definition given in Excerpt Post</li>
+<!--         <li>Sort tags based on Tag Count</li> -->
+      </ul>
+
+
+<!-- 	    <div id="alphabet-nav" class="btn-group btn-group-sm mb-2" role="group" aria-label="Alphabet Search"></div>
+
+      <table id="tagsTable" class="display" >
+    <thead>
+      <tr>
+        <th>Tag Name</th>
+        <th>Tag Count</th>   -->
+<!-- 	      <th>Excerpt Exists</th> -->
+<!--         <th>Tag Excerpt</th> -->
+<!--        <th>Wiki Post Exists</th> -->
+<!--         <th>Wiki Post </th> -->
+<!--         <th> </th> -->
+       
+<!--       </tr> -->
+<!--     </thead> -->
+<!--   </table> -->
+     
+
+
+  <!-- Dependencies -->
+<!--   <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script> -->
+ 
+
+      
+<!-- <div id="chartdiv"></div> -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/js/bootstrap.bundle.min.js" integrity="sha384-j1CDi7MgGQ12Z7Qab0qlWQ/Qqz24Gc6BM0thvEMVjHnfYGF0rmFCozFSxQBxwHKO" crossorigin="anonymous"></script>
+
+
+
+
+	     <div  class ="row">
+        <div class="col-md-2">
+          <div class="form-control" style="border:none;">
+              <label for="searchName">Search </label>
+              <input  class="form-control" id="searchName" placeholder="Tag Name">
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="form-control" style="border:none;">
+              <label for="searchDesc">Search </label>
+              <input  class="form-control" id="searchDesc" placeholder="Tag Description">
+          </div>
+        </div>
+        <div class="col-md-2">
+          <div class="form-control" style="border:none;">
+
+              <label for="sort">Sort:</label>
+              <select class="form-select" id="sort">
+                <option value="name">Name</option>
+                <option value="count">Popular</option>
+              </select>
+            </div>
+        </div>
+        <div class="col-md-2">
+            <div class="form-control" style="border:none;">
+
+              <label for="pageSize">Page Size:</label>
+              <select class="form-select" id="pageSize">
+                <option value="10">10</option>
+                <option value="25">25</option>
+                <option value="36" selected>36</option>
+                <option value="50">50</option>
+                <option value="100">100</option>
+              </select>
+            </div>
+        </div>
+        <div class="col-md-2">
+    <!-- <span> -->
+            <div class="form-control" style="border:none;">
+                <label for="pageSize">Jump to page:</label>
+                <div class="input-group mb-3">
+  <input type="text" id="jumpPage" min="1" class="form-control" placeholder="" aria-label="" aria-describedby="basic-addon2">
+  <div class="input-group-append">
+    <button class="btn btn-outline-dark" id="jumpBtn" type="button">Go</button>
+  </div>
+</div>
+
+
+
+                <!-- <div class="row">
+                  <div class="col-md-6">
+                    <input  class="form-control" type="number" id="jumpPage" min="1"  />
+                  </div>
+                  <div class="col-md-6">
+                    <button class="form-control btn btn-light btn-sm" id="jumpBtn">Go</button>
+                  </div>
+    
+
+                </div> -->
+            </div>
+         </div>
+    <!-- <input type="text" id="search" placeholder="Search tags..." /> -->
+
+  </div>
+
+  <div id="navbar"></div>
+  <div id="tags"></div>
+  <div id="pagination"></div>
+
+  <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+  <script>
+    let allTags = [];
+    let filteredTags = [];
+    let currentChar = '';
+    let currentPage = 1;
+    let recordsPerPage = 36;
+    let currentSort = 'name';
+
+let filterDueToNavBar = false;
+let filterDueToSearchButtons = false;
+
+    const getTagObject = (raw) => ({
+      name: raw[2],
+      desc: raw[7],
+	    
+      // desc: raw[6],
+      count: raw[3]
+
+    });
+
+    
+
+function renderTags() {
+      // console.log('renderTags');
+      //   console.log(filteredTags.length);
+      //   console.log(filteredTags);
+
+  const start = (currentPage - 1) * recordsPerPage;
+  const end = start + recordsPerPage;
+  const tagsToShow = filteredTags.slice(start, end);
+
+  const html = tagsToShow.map(tag => {
+    const name = tag.name || '';
+    // const desc = tag.desc || '';
+    const maxLen = 150;
+    const desc = tag.desc || ' '.repeat(maxLen);
+
+    const shortDesc = desc.length > maxLen ? desc.substring(0, maxLen) + '...' : desc;
+    const tooltip = desc ? desc.replace(/"/g, '&quot;') : 'No description available';
+
+var encodedName = encodeURIComponent(name);
+
+    return `<div class="card h-100"  title="${tooltip}">
+    <div class="card-header">
+    <mark>${name}</mark> 
+   <small>${tag.count ?? 0} Qs</small>
+  </div>
+  <div class="card-body d-flex flex-column min-vh-10">
+    <p class="card-text" style="font-size: 10px;">${shortDesc}</p>
+    <div class="card-footer text-body-secondary mt-auto " style="padding:0">
+    <a href="https://stackoverflow.com/questions/tagged/${encodedName}" target="_blank" class="card-link btn btn-sm btn-secondary" ><i class="fa-classic fa-solid fa-arrow-up-right-from-square fa-fw"></i></a>
+ <a href="family.html?name=${encodedName}" target="_blank" title="View Tag Family" class="card-link btn btn-sm btn-secondary" ><i class="fa-classic fa-solid fa-tags fa-fw"></i></a>
+  </div>
+  </div>
+</div>`;
+  }).join('');
+
+  $('#tags').html(html);
+}
+
+    function renderPagination() {
+      // console.log('renderPagination');
+
+      const totalPages = Math.ceil(filteredTags.length / recordsPerPage);
+      let html = '';
+
+      if (currentPage > 1) {
+        html += `<button data-page="${currentPage - 1}" title="Previous Page"><i class="fas fa-chevron-left"></i></button>`;
+      } else {
+        html += `<button class="disabled" disabled title="Previous Page"><i class="fas fa-chevron-left"></i></button>`;
+      }
+
+      if (totalPages <= 7) {
+        for (let i = 1; i <= totalPages; i++) {
+          html += `<button class="${i === currentPage ? 'active' : ''}" data-page="${i}">${i}</button>`;
+        }
+      } else {
+        html += `<button class="${1 === currentPage ? 'active' : ''}" data-page="1">1</button>`;
+        if (currentPage > 4) html += `<span class="ellipsis">...</span>`;
+        const start = Math.max(2, currentPage - 2);
+        const end = Math.min(totalPages - 1, currentPage + 2);
+        for (let i = start; i <= end; i++) {
+          html += `<button class="${i === currentPage ? 'active' : ''}" data-page="${i}">${i}</button>`;
+        }
+        if (currentPage < totalPages - 3) html += `<span class="ellipsis">...</span>`;
+        html += `<button class="${totalPages === currentPage ? 'active' : ''}" data-page="${totalPages}">${totalPages}</button>`;
+      }
+
+      if (currentPage < totalPages) {
+        html += `<button data-page="${currentPage + 1}" title="Next Page"><i class="fas fa-chevron-right"></i></button>`;
+      } else {
+        html += `<button class="disabled" disabled title="Next Page"><i class="fas fa-chevron-right"></i></button>`;
+      }
+
+      $('#pagination').html(html);
+    }
+
+function renderNavBar() {
+      // console.log('renderNavBar');
+
+  const chars = [...new Set(
+    allTags.map(t => {
+      const name = t.name || '';
+      return name.length > 0 ? name[0].toUpperCase() : '#';
+    })
+  )].sort();
+
+  allBtn  = `<button class="active  btn btn-sm btn-light" data-char="_" style="margin-top:20px; margin-bottom:20px;">All</button>`;
+
+  const buttons = chars.map(c =>
+    `<button class="${c === currentChar ? 'active btn-info' : ''}btn btn-sm btn-light" style="margin-top:20px; margin-bottom:20px;"data-char="${c}">${c}</button>`
+  ).join('');
+
+allBtn = allBtn+buttons;
+  $('#navbar').html(`<strong>Jump to Tags Starting From:</strong><br/> ${allBtn} <br/>`);
+
+  // $('#navbar').html(`<strong>Jump to Tags Starting From:</strong> ${buttons}`);
+}
+
+function isCharNumber(c) {
+  return c >= '0' && c <= '9';
+}
+
+
+function applyFilters() {
+    // console.log('applyFilters');
+
+    // const search = $('#search').val().toLowerCase();
+    const searchName= $('#searchName').val().toLowerCase();
+    const searchDesc = $('#searchDesc').val().toLowerCase();
+   
+    //if any other button from navbar is pressed
+    if (filterDueToNavBar){ 
+          if (currentChar =='_') //no need to do anything if all is pressed
+            {
+              // filteredTags = allTags;
+              location.reload();
+            }   
+          else (currentChar != '' && currentChar != '_' )
+            { 
+              filteredTags = allTags.filter(tag => {
+              const name = tag.name || '';
+              const desc = tag.desc || '';
+              const countStr = (tag.count ?? '').toString();
+              matchesChar =  name[0]?.toUpperCase() === currentChar; // Case 1: a-z ok 
+              if (isCharNumber(currentChar)  ||currentChar=='#')
+              {
+                  matchesChar =  name[0] == currentChar; //Case 2: 1-9 works ok
+                  if (currentChar=="0" ||currentChar=="#")
+                  { // Case 3: special case of 0 and empty name which was labelled as #
+                   if (currentChar=="#")
+                   { //if name is empty (null or nan)
+
+                      if(!name.length>0)
+                      { 
+                        matchesChar=true;
+                      }
+                    }
+                    else
+                    {
+                      
+                    }
+                  }
+              }
+            return matchesChar ;
+          });
+
+          } // end currentChar !='' something other than All clicked from navbar
+        }
+    else if (filterDueToSearchButtons)
+    {
+
+      if (searchName!='')
+      {
+        // console.log('inside search name');
+        // console.log(filteredTags.length);
+
+        filteredTags = allTags.filter(tag => {
+          const name = tag.name || '';
+          const desc = tag.desc || '';
+          const countStr = (tag.count ?? '').toString();
+
+          // const matchesChar = !currentChar || name[0]?.toUpperCase() === currentChar;
+
+          const matchesSearch =
+            name.toLowerCase().includes(searchName) //||
+            // desc.toLowerCase().includes(searchName) ||
+            // countStr.includes(searchName)
+            ;
+          // return matchesChar && matchesSearch;
+
+          return  matchesSearch;
+        });
+        // console.log(filteredTags.length);
+        // console.log(filteredTags);
+
+      }
+      else if (searchDesc!='')
+      {
+        // console.log('inside search desc');
+            filteredTags = allTags.filter(tag => {
+            const name = tag.name || '';
+            const desc = tag.desc || '';
+            const countStr = (tag.count ?? '').toString();
+
+            // const matchesChar = !currentChar || desc[0]?.toUpperCase() === currentChar;
+
+            const matchesSearch =
+              // name.toLowerCase().includes(searchName) ||
+              desc.toLowerCase().includes(searchDesc) //||
+              //countStr.includes(searchName)
+              ;
+            // return matchesChar && matchesSearch;
+
+            return  matchesSearch;
+          });
+
+      }
+      else
+        {
+         //name or description not searched
+        filteredTags= allTags;
+        filterDueToSearchButtons = false;
+      }
+
+      // else{
+      //   filteredTags= allTags;
+      // }
+      // filteredTags = allTags.filter(tag => {
+      //   const name = tag.name || '';
+      //   const desc = tag.desc || '';
+      //   const countStr = (tag.count ?? '').toString();
+
+      //   const matchesChar = !currentChar || name[0]?.toUpperCase() === currentChar;
+
+      //   const matchesSearch =
+      //     name.toLowerCase().includes(searchName) ||
+      //     desc.toLowerCase().includes(searchName) ||
+      //     countStr.includes(searchName);
+
+      //   return matchesChar && matchesSearch;
+      // });
+
+      if (currentSort === 'name') {
+        filteredTags.sort((a, b) => {
+          const nameA = a.name || '';
+          const nameB = b.name || '';
+          return nameA.localeCompare(nameB);
+        });
+      } 
+      else {
+        filteredTags.sort((a, b) => (b.count ?? 0) - (a.count ?? 0));
+      }
+    }
+    // console.log(" filteredTags after all filtering");
+
+    // console.log(filteredTags.length);
+    // console.log(filteredTags);
+    currentPage = 1;
+    renderTags();
+    renderPagination();
+}
+   
+  
+    $(async function () {
+      const raw = await $.getJSON('merged.json');
+	    
+      // const raw = await $.getJSON('MinimalChangesData.json');
+      // const raw = await $.getJSON('tags.json');
+
+      // console.log('raw');
+
+      allTags = raw.map(getTagObject);
+      filteredTags = allTags;
+
+      renderNavBar();
+      applyFilters();
+    });
+
+    $('#searchName, #searchDesc, #sort').on('input change', function () {
+      // console.log('on input change search sort');
+
+      currentSort = $('#sort').val();
+      filterDueToSearchButtons = true;
+      applyFilters();
+    });
+
+    $('#pageSize').on('change', function () {
+      // console.log('on  change pageSize');
+
+      recordsPerPage = parseInt($(this).val());
+      currentPage = 1;
+      renderTags();
+      renderPagination();
+    });
+
+    $('#jumpBtn').on('click', function () {
+      // console.log('on click jumpBtn');
+
+      const jumpTo = parseInt($('#jumpPage').val());
+      const totalPages = Math.ceil(filteredTags.length / recordsPerPage);
+      if (!isNaN(jumpTo) && jumpTo >= 1 && jumpTo <= totalPages) {
+        currentPage = jumpTo;
+        renderTags();
+        renderPagination();
+      }
+    });
+
+    $('#pagination').on('click', 'button', function () {
+      // console.log('on click pagination button');
+
+      const page = $(this).data('page');
+      if (page) {
+        currentPage = parseInt(page);
+        renderTags();
+        renderPagination();
+      }
+    });
+
+
+ 
+
+    $('#navbar').on('click', 'button', function () {
+      // console.log('on click navbar button');
+    $('#navbar button').removeClass('active');
+    $(this).addClass('active');
+    currentPage = 1;
+
+
+
+      currentChar = $(this).data('char');
+      // console.log(currentChar);
+      // console.log(currentChar+2);
+
+filterDueToNavBar = true;
+
+      applyFilters();
+
+
+      // renderNavBar();
+    });
+
+    // Keyboard navigation
+    document.addEventListener('keydown', function (e) {
+      // console.log('event addEventListener keydown');
+
+      const totalPages = Math.ceil(filteredTags.length / recordsPerPage);
+      if (e.key === 'ArrowRight' && currentPage < totalPages) {
+        currentPage++;
+        renderTags();
+        renderPagination();
+      } else if (e.key === 'ArrowLeft' && currentPage > 1) {
+        currentPage--;
+        renderTags();
+        renderPagination();
+      }
+    });
+  </script>
+
+    </body>
+<!-- <script>
+// Themes begin
+am4core.useTheme(am4themes_animated);
+// Themes end 
+
+
+
+var chart = am4core.create('chartdiv', am4charts.XYChart)
+chart.colors.step = 2;
+
+chart.legend = new am4charts.Legend()
+chart.legend.position = 'top'
+chart.legend.paddingBottom = 20
+chart.legend.labels.template.maxWidth = 95
+
+var xAxis = chart.xAxes.push(new am4charts.CategoryAxis())
+xAxis.dataFields.category = 'category'
+xAxis.renderer.cellStartLocation = 0.1
+xAxis.renderer.cellEndLocation = 0.9
+xAxis.renderer.grid.template.location = 0;
+
+var yAxis = chart.yAxes.push(new am4charts.ValueAxis());
+yAxis.min = 0;
+
+function createSeries(value, name) {
+    var series = chart.series.push(new am4charts.ColumnSeries())
+    series.dataFields.valueY = value
+    series.dataFields.categoryX = 'category'
+    series.name = name
+
+    series.events.on("hidden", arrangeColumns);
+    series.events.on("shown", arrangeColumns);
+
+    var bullet = series.bullets.push(new am4charts.LabelBullet())
+    bullet.interactionsEnabled = false
+    bullet.dy = 30;
+    bullet.label.text = '{valueY}'
+    bullet.label.fill = am4core.color('#ffffff')
+
+    return series;
+}
+
+chart.data = [
+    {
+        category: 'Place #1',
+        first: 40,
+        second: 55,
+        third: 60
+    },
+    {
+        category: 'Place #2',
+        first: 30,
+        second: 78,
+        third: 69
+    },
+    {
+        category: 'Place #3',
+        first: 27,
+        second: 40,
+        third: 45
+    },
+    {
+        category: 'Place #4',
+        first: 50,
+        second: 33,
+        third: 22
+    }
+]
+
+
+createSeries('first', 'The First');
+createSeries('second', 'The Second');
+createSeries('third', 'The Third');
+
+function arrangeColumns() {
+
+    var series = chart.series.getIndex(0);
+
+    var w = 1 - xAxis.renderer.cellStartLocation - (1 - xAxis.renderer.cellEndLocation);
+    if (series.dataItems.length > 1) {
+        var x0 = xAxis.getX(series.dataItems.getIndex(0), "categoryX");
+        var x1 = xAxis.getX(series.dataItems.getIndex(1), "categoryX");
+        var delta = ((x1 - x0) / chart.series.length) * w;
+        if (am4core.isNumber(delta)) {
+            var middle = chart.series.length / 2;
+
+            var newIndex = 0;
+            chart.series.each(function(series) {
+                if (!series.isHidden && !series.isHiding) {
+                    series.dummyData = newIndex;
+                    newIndex++;
+                }
+                else {
+                    series.dummyData = chart.series.indexOf(series);
+                }
+            })
+            var visibleCount = newIndex;
+            var newMiddle = visibleCount / 2;
+
+            chart.series.each(function(series) {
+                var trueIndex = chart.series.indexOf(series);
+                var newIndex = series.dummyData;
+
+                var dx = (newIndex - trueIndex + middle - newMiddle) * delta
+
+                series.animate({ property: "dx", to: dx }, series.interpolationDuration, series.interpolationEasing);
+                series.bulletsContainer.animate({ property: "dx", to: dx }, series.interpolationDuration, series.interpolationEasing);
+            })
+        }
+    }
+}</script>
+
+
+
+
+    <script> -->
+
+ 
+<!--     $(document).ready(function() {
+	    var _alphabetSearch = '';
+ 
+$.fn.dataTable.ext.search.push( function ( settings, searchData ) {
+    if ( ! _alphabetSearch ) {
+        return true;
+    }
+ 
+    if ( searchData[0].charAt(0) === _alphabetSearch ) {
+        return true;
+    }
+ 
+    return false;
+} );
+ 
+ 
+function bin ( data ) {
+    var letter, bins = {};
+ console.log("inside bins");
+ console.log(data);
+	
+    for ( var i=0, ien=data.length ; i<ien ; i++ ) {
+        letter = data[i].charAt(0).toUpperCase();
+ console.log(data[i]);
+ console.log(letter);
+	    
+ 
+        if ( bins[letter] ) {
+            bins[letter]++;
+        }
+        else {
+            bins[letter] = 1;
+        }
+    }
+ 
+    return bins;
+}
+	    
+      var table = $('#tagsTable').DataTable({
+        ajax: 'MinimalChangesData_TagsPosts.json',
+        columns: [
+	          { data: 2 },  // TagName
+	          { data: 3 },  // TagCount
+	          // { data: 7,
+	          //   	render: function (data) {
+	          //     	return data.trim() ? '✔️' : '❌';
+	          //   	}
+	          // }, 
+		{
+			            // data: 7,  // ExcerptPostBody
+			            // render: function (data, type) {
+			            //   return data ? '<span title="' + data + '">' + data + '</span>' : '';
+			            // }
+		 data: 7,
+			    render: function (data, type) {
+			      if (!data) return '';
+			      const short = data.substring(0, 100);
+			      return `<span title="${data.replace(/"/g, '&quot;')}">${short}${data.length > 100 ? '…' : ''}</span>`;
+			    }
+	          },
+		// {
+	 //        data: 6,
+		//             render: function (data) {
+		//               return data.trim() ? '✔️' : '❌';
+		//             }
+		// }, 
+		{
+		            // data: 6,  // WikiPostBody (HTML)
+		            // className: 'body-html',
+		            // render: function (data, type) {
+		            //   return type === 'display' ? data : data;
+		            // }
+		 data: 6,
+			    className: 'body-html',
+			    render: function (data, type) {
+				      if (!data) return '';
+				      const tempDiv = document.createElement("div");
+				      tempDiv.innerHTML = data;
+				      const plainText = tempDiv.textContent || tempDiv.innerText || "";
+				      const short = plainText.substring(0, 100).replace(/"/g, '&quot;');
+				      return `<span title="${plainText.replace(/"/g, '&quot;')}">${short}${plainText.length > 100 ? '…' : ''}</span>`;
+			    }
+	          },
+		{
+		    data: 2,
+			    orderable: false,
+			    searchable: false,
+			    render: function (data) {
+			      const url = `https://stackoverflow.com/tags/${encodeURIComponent(data)}/info`;
+			      return `<a href="${url}" target="_blank">
+			                <button type="button" class="btn btn-dark">Explore</button>
+			              </a>`;
+			    }
+		  }
+        ]
+	      // ,
+       //  initComplete: function () {
+       //    buildAlphabetNav(this.api());
+       //  }
+      });
+
+	     // var table = $('#example').DataTable();
+ 
+    var alphabet = $('<div class="alphabet"/>').append( 'Search: ' );
+    var columnData = table.column(2).data();
+    var bins = bin( columnData );
+ 
+    $('<span class="clear active"/>')
+        .data( 'letter', '' )
+        .data( 'match-count', columnData.length )
+        .html( 'All' )
+        .appendTo( alphabet );
+
+	    const tabs = {};
+	// const tagNameColumnIndex = api.column('TagName:name').index();
+	const tagNameColumnIndex =2;
+  	table.rows().every(function () {
+		
+	      const tag = this.data()[tagNameColumnIndex];
+	    // const tag = this.data()[2]; // TagName
+	    if (!tag) return;
+	    const firstChar = tag[0].toUpperCase();
+	    tabs[firstChar] = true;
+	  });
+	    
+  const specialChars = Object.keys(tabs).filter(ch => !/[A-Z0-9]/.test(ch)).sort();
+	  const letters = Object.keys(tabs).filter(ch => /[A-Z]/.test(ch)).sort();
+	  const digits = Object.keys(tabs).filter(ch => /[0-9]/.test(ch)).sort();
+ console.log("specialChars");
+ console.log(specialChars);
+ console.log("letters");
+ console.log(letters);
+	    
+ console.log("digits");
+ console.log(digits);
+	    
+	
+	  const navelements = specialChars.concat(letters).concat(digits);
+ console.log("navelements");
+ console.log(navelements);
+ console.log(navelements.length);
+ console.log('bins');
+ console.log(bins);
+ console.log(bins.length);
+	    
+	    
+	    
+    for ( var i=0 ; i<bins.length ; i++ ) {
+        // var letter = String.fromCharCode( 65 + i );
+ console.log(navelements[i]);
+        $('<span/>')
+            .data( 'letter', navelements[i] )
+            .data( 'match-count', bins[navelements[i]] || 0 )
+            .addClass( ! bins[navelements[i]] ? 'empty' : '' )
+            .html( navelements[i] )
+            .appendTo( alphabet );
+    }
+ 
+    alphabet.insertBefore( table.table().container() );
+ 
+    alphabet.on( 'click', 'span', function () {
+        alphabet.find( '.active' ).removeClass( 'active' );
+        $(this).addClass( 'active' );
+ 
+        _alphabetSearch = $(this).data('letter');
+        table.draw();
+    } );
+ 
+    var info = $('<div class="alphabetInfo"></div>')
+        .appendTo( alphabet );
+ 
+    alphabet
+        .on( 'mouseenter', 'span', function () {
+            info
+                .css( {
+                    opacity: 1,
+                    left: $(this).position().left,
+                    width: $(this).width()
+                } )
+                .html( $(this).data('match-count') )
+        } )
+        .on( 'mouseleave', 'span', function () {
+            info.css('opacity', 0);
+        } );
+
+	    
+	
+    } );
+	    
+
+  </script>
+ -->
+</html>
 
