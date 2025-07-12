@@ -86,8 +86,12 @@
 
     <script>
         const urlParams = new URLSearchParams(window.location.search);
+        
         const selectedTag = urlParams.get('name') || "";
-
+console.log('inside script');
+console.log(urlParams);
+console.log(selectedTag);
+        
 function adjustWikiBodyLinks(html) {
     const container = document.createElement('div');
     container.innerHTML = html;
