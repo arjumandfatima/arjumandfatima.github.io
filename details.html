@@ -220,6 +220,10 @@ body.innerHTML = adjustWikiBodyLinks(node.WikiBody || '');
         }
 
         async function buildTree() {
+            console.log('inside buildTree');
+console.log(urlParams);
+console.log(selectedTag);
+        
             try {
                 const res = await fetch('merged.json');
                 const flatData = await res.json();
